@@ -1,8 +1,0 @@
-*.class
-*.classpath
-*.project
-*.prefs
-org.eclipse.*.xml
-WEB-INF/classes/
-WEB-INF/classes
-/target/
