@@ -31,12 +31,12 @@ public class MatchInfoAction {
     }
 
     @OnOpen
-    public void onOpen(Session session) {
+    public void onOpen() {
         System.out.println("Client connected");
     }
 
     @OnClose
-    public void onClose(Session session) {
+    public void onClose() {
         System.out.println("Connection closed");
     }
 }
