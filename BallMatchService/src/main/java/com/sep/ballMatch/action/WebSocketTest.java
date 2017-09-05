@@ -37,7 +37,7 @@ public class WebSocketTest {
 	 * 连接关闭调用的方法
 	 */
 	@OnClose
-	public void onClose(){
+	public void onClose(Session session){
 		webSocketSet.remove(this);  //从set中删除
 		subOnlineCount();           //在线数减1
 		System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount());
