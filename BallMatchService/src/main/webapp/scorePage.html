@@ -17,6 +17,13 @@ text-align:center;}
 <script>
 window.onload=function(){
 	var oNextBtn=document.getElementById("nextBtn");
+	var oMain=document.getElementById("main");
+	var liArr=oMain.getElementsByTagName("li");
+	liArr[0].innerHTML=playerJson[0].name;
+	liArr[2].innerHTML=playerJson[1].name;
+	
+	liArr[3].innerHTML=playerJson[0].score;
+	liArr[5].innerHTML=playerJson[1].score;
 	oNextBtn.onclick=function(){
 		window.location.href="personalHomePage.html";
 	}
