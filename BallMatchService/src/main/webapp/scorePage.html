@@ -4,14 +4,36 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <link href="css/main.css" type="text/css" rel="stylesheet">
+<script src="js/main.js" type="text/javascript"></script>
 <style>
 #main ul {width:800px;margin:50px auto;}
 #main li{display:inline-block;width:166px;margin:50px;font-size:35px;height:100px;line-height:100px;
 text-align:center;}
 #main .fontBig{font-size:100px;}
+.btn{top:5px;text-algin:center;border-radius:10px;}
+#homeBtn{left:5px;}
+#nextBtn{right:5px;}
 </style>
+<script>
+window.onload=function(){
+	var oNextBtn=document.getElementById("nextBtn");
+	var oMain=document.getElementById("main");
+	var liArr=oMain.getElementsByTagName("li");
+	liArr[0].innerHTML=playerJson[0].name;
+	liArr[2].innerHTML=playerJson[1].name;
+	
+	liArr[3].innerHTML=playerJson[0].score;
+	liArr[5].innerHTML=playerJson[1].score;
+	oNextBtn.onclick=function(){
+		window.location.href="personalHomePage.html";
+	}
+	
+}
+</script>
 </head>
 <body>
+<div id="homeBtn" class="btn" onclick="goHome()">首页</div>
+<div id="nextBtn" class="btn">Next</div>
 <div id="main">
 	<ul><li>Player1</li><li>开球选择</li><li>Player2</li>
 	<li class="fontBig">0</li><li class="fontBig">:</li><li class="fontBig">0</li></ul>
