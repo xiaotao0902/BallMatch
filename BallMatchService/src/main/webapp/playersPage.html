@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link href="css/main.css" type="text/css" rel="stylesheet">
+<script src="js/main.js" type="text/javascript"></script>
+<style>
+#left,#right{width:50%;height:100%;float:left;padding:100px;border:1px solid #000;}
+#left{border-right:1px solid #000;}
+ul{margin-top:150px;}
+li{margin:20px 0;font-weight:bold;height:30px;line-height:30px;}
+#main .level_item{color:red;}
+#main .win_item{color:green;}
+#main .club_item{color:blue;}
+img{width:25px;height:25px;vertical-align:middle;}
+#main .ach_item{vertical-align:middle;}
+.btn{top:5px;text-algin:center;border-radius:10px;}
+#homeBtn{left:5px;}
+#nextBtn{right:5px;}
+</style>
+<script>
+window.onload=function(){
+	var oNextBtn=document.getElementById("nextBtn");
+	var oMain=document.getElementById("main");
+	var oDiv=oMain.getElementsByTagName("div");
+	var oH1=document.getElementsByTagName("h1");
+	for(var j=0;j<2;j++){
+		var liList=oDiv[j].getElementsByTagName("li");
+		oH1[j].innerHTML=playerJson[j]["name"];
+		for(var i in liList){
+			switch(i){
+				case "0":
+					liList[i].innerHTML+="<span class='level_item'>"+playerJson[j]["level"]+"</span>";
+					break;
+				case "1":
+					var temp='';
+					for(var k=0;k<parseInt(playerJson[j]["achievement"]);k++){
+						temp+="<img src='img/star.png' />";
+					}
+					liList[i].innerHTML+=temp;
+					break;
+				case "2":
+					liList[i].innerHTML+="<span class='win_item'>"+playerJson[j]["winPercent"]+"</span>";
+					break;
+				case "3":
+					
+					liList[i].innerHTML+="<span class='club_item'>"+playerJson[j]["club"]+"</span>";
+					break;
+			}
+			
+		}
+	}
+	
+	oNextBtn.onclick=function(){
+		window.location.href="scorePage.html";
+	}
+}
+</script>
+</head>
+<body>
+<div id="homeBtn" class="btn" onclick="goHome()">首页</div>
+<div id="nextBtn" class="btn">Next</div>
+<div id="main">
+	<div id="left">
+		<h1>Player1</h1>
+		<ul id="left1">
+			<li>级别：</li><li><span class="ach_item">成就：</span></li><li>胜率：</li><li>球杆：</li>
+		</ul>
+	</div>
+	<div id="right">
+		<h1>Player1</h1>
+		<ul id="right1">
+			<li>级别：</li><li><span class="ach_item">成就：</span></li><li>胜率：</li><li>球杆：</li>
+		</ul>
+	</div>
+</div>
+</body>
+</html>
