@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>VS Player Profile Score</title>
+<link href="css/main.css" type="text/css" rel="stylesheet"/>
+<script src="js/main.js" type="text/javascript"></script>
+<script>
+window.onload=function(){
+	document.onclick=function(){
+		window.location.href="inGame.html";
+	}	
+	
+	var oMain=document.getElementById("main");
+	var score=window.sessionStorage.getItem("score");
+	var scoreArr=[];
+	if(!!score){
+		scoreArr=score.split(",");
+	}else{
+		scoreArr=[0,0];
+	}
+	var whoWin=-1;
+	
+	for(var i=0;i<2;i++){
+		if(scoreArr[i]==7){
+			whoWin=i;
+			break;
+		}
+	}
+	if(whoWin>-1){
+		document.onclick=null;
+		window.sessionStorage.setItem("whoWin",whoWin);
+		setTimeout(function(){
+			window.location.href="winnerPage.html";
+		},1000);
+		
+	}
+	var headImg=oMain.getElementsByClassName("headImg");
+	for(var i=0;i<headImg.length;i++){
+		var span=headImg[i].getElementsByTagName("span");
+		span[0].innerHTML=userData[i].name;
+		span[1].innerHTML=scoreArr[i];
+	}
+	
+	
+	
+	/* setTimeout(function(){
+		window.location.href="inGame.html";
+	},3000); */
+}
+</script>
+</head>
+<body>
+<img src="img/Unicuelogo.png" id="logo">
+<div id="main">
+	<div class="gameName">Race to 7</div>
+	<div class="headImg">
+		<span class="name"></span>
+		<span class="score">0</span>
+	</div>
+	<div class="headImg">
+		<span class="name"></span>
+		<span class="score">0</span>
+	</div>
+</div>
+</body>
+</html>
