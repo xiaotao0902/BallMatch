@@ -2,23 +2,14 @@ package com.sep.ballMatch.entity;
 
 public class Result {
 	
-	private String code;
-	private String message;
-	public String getCode() {
-		return code;
+	private String status;
+
+	public String getStatus() {
+		return status;
 	}
-	public void setCode(String code) {
-		this.code = code;
-	}
-	public String getMessage() {
-		return message;
-	}
-	public void setMessage(String message) {
-		this.message = message;
-	}
-	@Override
-	public String toString() {
-		return "Result [code=" + code + ", message=" + message + "]";
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }

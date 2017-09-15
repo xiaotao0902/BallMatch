@@ -72,5 +72,38 @@ public class GameProcess {
 				+ ", timeStamp=" + timeStamp + ", requestId=" + requestId + ", createdBy=" + createdBy
 				+ ", firstShotPlayerId=" + firstShotPlayerId + ", playerIds=" + playerIds + ", data=" + data + "]";
 	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((data == null) ? 0 : data.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GameProcess other = (GameProcess) obj;
+		if (data == null) {
+			if (other.data != null)
+				return false;
+		} else if (!compareData(data,other.data))
+			return false;
+		return true;
+	}
+	
+	private boolean compareData(List<Status> data,List<Status> otherData) {
+		int size = data.size();
+		for(int i = 0 ; i < size ; i++) {
+			if(!data.get(i).equals(otherData.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
 	
 }
