@@ -7,6 +7,8 @@ public class GameCache {
 	public static List<GameProcess> game_cache = new Vector<GameProcess>();
 	
 	public static String[] players= {"A","B"};
+	
+	public static String currentPlayer = "A";
 	 
 	public static int playerNum = 0;
 
@@ -25,12 +27,14 @@ public class GameCache {
 	
 	public static String doSwith() {
 		int i = playerNum ++;
-		return players[i%2];
+		currentPlayer = players[i%2];
+		return currentPlayer;
 	}
 	
 	public static String notDoSwith() {
 		int i = playerNum;
-		return players[i%2];
+		currentPlayer = players[i%2];
+		return currentPlayer;
 	}
 	
 

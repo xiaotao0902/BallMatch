@@ -2,6 +2,7 @@ package com.sep.ballMatch.action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -14,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
 import com.sep.ballMatch.common.BaseResource;
+import com.sep.ballMatch.entity.GameCache;
 import com.sep.ballMatch.entity.GameProcess;
 import com.sep.ballMatch.entity.GameStatus;
 import com.sep.ballMatch.entity.Result;
@@ -47,5 +49,12 @@ public class MatchResource extends BaseResource {
 		GameStatus gameStatus = gson.fromJson(json, GameStatus.class);
 		Result result = matchService.startMatch(gameStatus);
 		return Response.ok(result).build();
+	}
+	
+	@GET 
+	@Path("/changePlayer")
+	public Response changePlayer(@Context HttpServletRequest request) {
+		GameCache.doSwith();
+		return Response.ok("ok").build();
 	}
 }

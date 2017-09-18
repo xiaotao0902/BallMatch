@@ -1,10 +1,10 @@
 package com.sep.ballMatch.entity;
 
+import java.util.List;
+
 public class GameStatus {
 	private String player;
-	private String score;
-	private String[] balls;
-	private boolean ifPlay;
+	private List<Integer> balls;
 	
 	public String getPlayer() {
 		return player;
@@ -12,23 +12,10 @@ public class GameStatus {
 	public void setPlayer(String player) {
 		this.player = player;
 	}
-	public String getScore() {
-		return score;
-	}
-	public void setScore(String score) {
-		this.score = score;
-	}
-	public String[] getBalls() {
+	public List<Integer> getBalls() {
 		return balls;
 	}
-	public void setBalls(String[] balls) {
+	public void setBalls(List<Integer> balls) {
 		this.balls = balls;
 	}
-	public boolean isIfPlay() {
-		return ifPlay;
-	}
-	public void setIfPlay(boolean ifPlay) {
-		this.ifPlay = ifPlay;
-	}
-	
 }
