@@ -39,7 +39,6 @@ public class MatchSocket {
 	 */
 	@OnMessage
 	public void onMessage(String message) {
-		System.out.println("client message:" + message);
 		//群发消息
 		for(MatchSocket item: matchSocketSet){
 			try {

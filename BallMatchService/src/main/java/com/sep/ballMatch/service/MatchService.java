@@ -62,7 +62,6 @@ public class MatchService {
 					}
 					return result;
 				}
-				
 			} else {
 				return result;
 			}
@@ -102,7 +101,10 @@ public class MatchService {
 			for(Status status : currentData) {
 				balls.add(status.getStatus());
 			}
+			gameStatus.setBalls(balls);
 		}
+		Gson gson = new Gson();
+		logger.info(gson.toJson(gameStatus));
 		return gameStatus;
 	}
 }
