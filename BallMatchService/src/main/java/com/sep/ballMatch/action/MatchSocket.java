@@ -8,9 +8,6 @@ import javax.websocket.server.ServerEndpoint;
 
 @ServerEndpoint("/matchSocket")
 public class MatchSocket {
-	//静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
-	private static int onlineCount = 0;
-
 	//concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。若要实现服务端与单一客户端通信的话，可以使用Map来存放，其中Key可以为用户标识
 	private static CopyOnWriteArraySet<MatchSocket> matchSocketSet = new CopyOnWriteArraySet<MatchSocket>();
 
@@ -25,8 +22,6 @@ public class MatchSocket {
 	public void onOpen(Session session){
 		this.session = session;
 		matchSocketSet.add(this);     //加入set中
-		addOnlineCount();           //在线数加1
-		System.out.println("new connection  current connections is " + getOnlineCount());
 	}
 
 	/**
@@ -35,8 +30,6 @@ public class MatchSocket {
 	@OnClose
 	public void onClose(Session session){
 		matchSocketSet.remove(this);  //从set中删除
-		subOnlineCount();           //在线数减1
-		System.out.println("one connection is close current connections is" + getOnlineCount());
 	}
 
 	/**
@@ -79,15 +72,4 @@ public class MatchSocket {
 		//this.session.getAsyncRemote().sendText(message);
 	}
 
-	public static synchronized int getOnlineCount() {
-		return onlineCount;
-	}
-
-	public static synchronized void addOnlineCount() {
-		MatchSocket.onlineCount++;
-	}
-
-	public static synchronized void subOnlineCount() {
-		MatchSocket.onlineCount--;
-	}
 }

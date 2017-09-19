@@ -14,7 +14,7 @@ public class GameCache {
 
 	public static GameProcess getGameProcess(GameProcess gameProcess) {
 		GameProcess lastBall = new GameProcess();
-		if(game_cache.size()!=0) {
+		if(game_cache.size() != 0) {
 			lastBall = game_cache.get(0);
 			game_cache.remove(0);
 			game_cache.add(gameProcess);
