@@ -30,15 +30,5 @@ public class GameCache {
 		currentPlayer = players[i%2];
 		return currentPlayer;
 	}
-	
-	public static String notDoSwith() {
-		int i = playerNum;
-		currentPlayer = players[i%2];
-		return currentPlayer;
-	}
-	
 
-	public static void main(String args[]) {
-		System.out.println(notDoSwith());
-	}
 }

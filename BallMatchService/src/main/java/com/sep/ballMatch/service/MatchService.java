@@ -81,6 +81,8 @@ public class MatchService {
 			List<Status> lastData = last.getData();
 			List<Status> currentData = current.getData();
 			
+			gameStatus.setPlayer(GameCache.currentPlayer);
+			
 			if(currentData.get(15).getStatus()==0) {
 				GameCache.doSwith();
 				gameStatus.setPlayer(GameCache.currentPlayer);
@@ -88,7 +90,7 @@ public class MatchService {
 				int size = lastData.size();
 				for(int i = 0 ; i < size ; i++) {
 					if(!lastData.get(i).equals(currentData.get(i))) {
-						if(lastData.get(i).getStatus() == currentData.get(i).getStatus()) {
+						if(lastData.get(i).getStatus() != currentData.get(i).getStatus()) {
 							GameCache.doSwith();
 							gameStatus.setPlayer(GameCache.currentPlayer);
 							break;
