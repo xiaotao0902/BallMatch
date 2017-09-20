@@ -3,6 +3,9 @@ var userData=[{name:"Guest",summary:"新手请多多指教",scoreLevel:"img/scor
  {name:"一二三四五六七",summary:"三十年未逢敌手",scoreLevel:"img/scoreLevel/A.png",
 		img:"img/headImg_dingjunhui.png",driver:'img/driver2.png'}];
 
+var contextRoot="/ballMatch/bs/game";
+var websocketPath="ws://localhost:8080/ballMatch/matchSocket";
+
 // whoStart score 保存在sessionStorage
 
 function formatTime(time){

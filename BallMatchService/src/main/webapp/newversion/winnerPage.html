@@ -19,6 +19,17 @@ window.onload=function(){
 	setTimeout(function(){
 		window.location.href="startScreen.html";
 		window.sessionStorage.clear();
+		$.ajax({
+			type: "GET",
+        	url: contextRoot+"/info",
+        	data: {
+        		"info":"end"
+        	},
+        	dataType:"json",
+        	success: function(data){
+            	console.log(data);
+        	}
+		});
 	},3000);
 }
 </script>
