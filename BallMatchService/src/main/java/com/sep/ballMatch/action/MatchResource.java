@@ -6,6 +6,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -55,6 +56,13 @@ public class MatchResource extends BaseResource {
 	@Path("/changePlayer")
 	public Response changePlayer(@Context HttpServletRequest request) {
 		GameCache.doSwith();
+		return Response.ok("ok").build();
+	}
+	
+	@GET 
+	@Path("/setPlayer")
+	public Response setPlayer(@QueryParam("player") String player,@Context HttpServletRequest request) {
+		GameCache.setCurrentPlayer(player);
 		return Response.ok("ok").build();
 	}
 }

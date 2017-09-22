@@ -3,6 +3,7 @@ package com.sep.ballMatch.service;
 import com.sep.ballMatch.entity.GameProcess;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,24 +43,26 @@ public class MatchService {
 	} 
 	
 	public Result startMatch(GameStatus gameStatus) {
-		String cv_start_url = PropUtil.getProperty("cv_start_url");
+//		String cv_start_url = PropUtil.getProperty("cv_start_url");
 		Gson gson = new Gson();
 		Result result = new Result();
 		result.setStatus("error");
 		try {
-			Map<String, Object> resultMap = HttpUtil.sendPostRequest(cv_start_url, "", "", null);
+//			Map<String, Object> resultMap = HttpUtil.sendPostRequest(cv_start_url, "", "", null);
 			
-			Integer responseCode = (Integer) resultMap.get("responseCode");
+			Map<String, Object> resultMap = new HashMap<String, Object>();
+			Result result1 = new Result();
+			result1.setStatus("ok");
+			resultMap.put("responseCode", "201");
+			resultMap.put("result", gson.toJson(result1));
+			
+			Integer responseCode = Integer.parseInt((String)resultMap.get("responseCode"));
 
 			if (responseCode == 200||responseCode == 201) {
 				String resultJson = (String) resultMap.get("result");
 				result = gson.fromJson(resultJson, Result.class);
 				if("ok".equalsIgnoreCase(result.getStatus())) {
-					if("A".equals(gameStatus.getPlayer())){
-						GameCache.currentPlayer = "A";
-					}else {
-						GameCache.currentPlayer = "B";
-					}
+					GameCache.setCurrentPlayer(gameStatus.getPlayer());
 					return result;
 				}
 			} else {
@@ -74,34 +77,70 @@ public class MatchService {
 	
 	public GameStatus doDetailMatch(GameProcess last,GameProcess current) {
 		GameStatus gameStatus = new GameStatus();
-		if(last.equals(current)) {
-			return null;
-		}else {
+		if(last != null) {// not first time 
 			List<Status> lastData = last.getData();
 			List<Status> currentData = current.getData();
-			
-			gameStatus.setPlayer(GameCache.currentPlayer);
-			
-			if(currentData.get(15).getStatus()==0) {
-				GameCache.doSwith();
+		    if(last.equals(current)) {//the ball didn't move
+				if(currentData.get(15).getStatus()==0) {// if white ball in the hole change player
+					GameCache.doSwith();
+					gameStatus.setPlayer(GameCache.currentPlayer);
+					List<Integer> balls = new ArrayList<Integer>();
+					for(Status status : currentData) {
+						balls.add(status.getStatus());
+					}
+					gameStatus.setBalls(balls);
+				}else {
+					return null;
+				}
+			}else {// the ball move
+				boolean changePlayer = true;
 				gameStatus.setPlayer(GameCache.currentPlayer);
-			}else {
-				int size = lastData.size();
-				for(int i = 0 ; i < size ; i++) {
-					if(!lastData.get(i).equals(currentData.get(i))) {
-						if(lastData.get(i).getStatus() != currentData.get(i).getStatus()) {
-							GameCache.doSwith();
-							gameStatus.setPlayer(GameCache.currentPlayer);
-							break;
+				if(currentData.get(15).getStatus()==0) {// if white ball in the hole change player
+					changePlayer = true;
+				}else {
+					int size = lastData.size();
+					for(int i = 0 ; i < size ; i++) {
+						if(!lastData.get(i).equals(currentData.get(i))) {// if any ball in the hole not change player
+							if(lastData.get(i).getStatus() != currentData.get(i).getStatus()) {
+								changePlayer = false;
+								break;
+							}
 						}
 					}
 				}
+				
+				if(changePlayer) {
+					GameCache.doSwith();
+				}
+				gameStatus.setPlayer(GameCache.currentPlayer);
+				
+				List<Integer> balls = new ArrayList<Integer>();
+				for(Status status : currentData) {
+					balls.add(status.getStatus());
+				}
+				gameStatus.setBalls(balls);
 			}
+		}else {// first time to do
+			boolean changePlayer = true;
+			List<Status> currentData = current.getData();
+			
 			List<Integer> balls = new ArrayList<Integer>();
 			for(Status status : currentData) {
+				if(status.getStatus()==0) {// if some ball in the hole, not change player
+					changePlayer = false;
+				}
 				balls.add(status.getStatus());
 			}
 			gameStatus.setBalls(balls);
+			
+			if(currentData.get(15).getStatus()==0) {// if white ball in the hole change player
+				changePlayer = true;
+			}
+			
+			if(changePlayer) {
+				GameCache.doSwith();
+			}
+			gameStatus.setPlayer(GameCache.currentPlayer);
 		}
 		Gson gson = new Gson();
 		logger.info(gson.toJson(gameStatus));

@@ -21,14 +21,28 @@ public class GameCache {
 			return lastBall;
 		}else {
 			game_cache.add(gameProcess);
-			return gameProcess;
+			return null;
 		}
+	}
+	
+	public static String setCurrentPlayer(String cp) {
+		if("A".equals(cp))
+			playerNum = 1;
+		else
+			playerNum = 0;
+		currentPlayer = cp;
+		return currentPlayer;
 	}
 	
 	public static String doSwith() {
 		int i = playerNum ++;
 		currentPlayer = players[i%2];
 		return currentPlayer;
+	}
+	
+	public static void main(String args[]) {
+		setCurrentPlayer("B");
+		System.out.println(currentPlayer);
 	}
 
 }

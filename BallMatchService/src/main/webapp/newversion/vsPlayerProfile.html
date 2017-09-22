@@ -23,20 +23,25 @@ window.onload=function(){
 	for(var i=0;i<headImg.length;i++){
 		(function(index){
 			headImg[index].onclick=function(){
+				var _index=index;
+				index=index==0?"A":"B";
+				
 				//tell backend who starts the game
 				$.ajax({
 					type: "POST",
+					contentType: "application/json; charset=utf-8",
 	            	url: contextRoot+"/start",
-	            	data: {
-	            		"whoStart":index
-	            	},
+	            	data: JSON.stringify({
+	            		"player":index
+	            	}),
 	            	dataType:"json",
 	            	success: function(data){
-	                	console.log(data);
+	                	//alert(JSON.stringify(data));
+	                	window.sessionStorage.setItem("whoStart",_index);
+	    				window.location.href="vsPlayerProflieScore.html";
 	            	}
 				});
-				window.sessionStorage.setItem("whoStart",index);
-				window.location.href="vsPlayerProflieScore.html";
+				
 			}
 		})(i);
 		

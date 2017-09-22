@@ -16,8 +16,11 @@ window.onload=function(){
 	var timeExt=document.getElementById("timeExt");
 	var playerName=document.getElementsByClassName("playerName")[0];
 	var changePlayer=document.getElementById("changePlayer");
+	
+	var playerNameTitle=document.getElementById("playerNameTitle");
 	var oTab=document.getElementById("tab");
-	var oScore=document.getElementById("score");
+	var title=document.getElementById("title");
+	var titleLi=title.getElementsByTagName("li");
 	var oLiOfTab=oTab.getElementsByTagName("li");
 	
 	//等于当前用户
@@ -29,8 +32,11 @@ window.onload=function(){
 	}else{
 		scoreArr=[0,0];
 	}
-	oScore.innerHTML=scoreArr[0]+" "+scoreArr[1];
+	titleLi[1].innerHTML=scoreArr[0]+"&nbsp;&nbsp;:&nbsp;&nbsp;"+scoreArr[1];
 	playerName.innerHTML=userData[whoStart].name;
+	titleLi[0].innerHTML=userData[0].name+"&nbsp;&nbsp;:&nbsp;&nbsp;"+userData[1].name;
+	
+	
 	
 	var zIndex=10;
 	
@@ -38,12 +44,10 @@ window.onload=function(){
 		oLiOfTab[i].index=i;
 		oLiOfTab[i].innerHTML=userData[i].name+" Win";
 		oLiOfTab[i].onclick=function(){
+			var player=this.index==0?"A":"B";
 			$.ajax({
 				type: "GET",
-	        	url: contextRoot+"/changePlayer",
-	        	data: {
-	        		"whoStart":this.index
-	        	},
+	        	url: contextRoot+"/setPlayer?player="+player,
 	        	dataType:"json",
 	        	success: function(data){
 	            	console.log(data);
@@ -51,6 +55,7 @@ window.onload=function(){
 			});
 			scoreArr[this.index]++;
 			window.sessionStorage.setItem("score",scoreArr.join(","));
+			window.sessionStorage.setItem("whoStart",this.index);
 			window.location.href="vsPlayerProflieScore.html";
 		}
 	}
@@ -85,22 +90,23 @@ window.onload=function(){
 	}
 	
 	changePlayer.onclick=function(){
+		var player=0;
 		whoStart=whoStart==0?1:0;
 		window.sessionStorage.setItem("whoStart",whoStart);
 		playerName.innerHTML=userData[whoStart].name;
 		timeDiv.innerHTML="00:50";
-		
+		player=whoStart==0?"A":"B";
 		$.ajax({
 			type: "GET",
         	url: contextRoot+"/changePlayer",
         	data: {
-        		"whoStart":whoStart
+        		"player":player
         	},
         	dataType:"json",
         	success: function(data){
             	console.log(data);
         	}
-		});
+		}); 
 		
 		//window.location.reload();
 	}
@@ -182,27 +188,38 @@ window.onload=function(){
 
 	//接收到消息的回调方法
 	websocket.onmessage = function (event) {
-		//1 表示进球 0 表示不进
+		console.log(event);
+		//1 表示不进 0 表示进球
 		//{"player":"A","balls":[0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1]} 
 	    //setMessageInnerHTML(event.data);
 		var data=event.data;
+		console.log(data);
+		data=JSON.parse(data);
 		var balls=data.balls;
+		console.log(balls);
 		var oldBalls=window.sessionStorage.getItem("balls");
 		//判断是不是第一次打
 		if(!!oldBalls){
 			var oldBallArr=oldBalls.split(",");
 			for(var i=0;i<15;i++){
-				if(balls[i]==1&&oldBallArr[i]==0){
+				if(balls[i]==0&&oldBallArr[i]==1){
 					getAGoal(ballArr[i],true);
 				}
 			}
 		}else{
 			for(var i=0;i<15;i++){
-				if(balls[i]==1){
+				if(balls[i]==0){
 					getAGoal(ballArr[i],true);
 				}
 			}
 		}
+		console.log("data.player",data.player);
+		//切换用户
+		var player=data.player=="A"?0:1;
+		window.sessionStorage.setItem("whoStart",player);
+		playerName.innerHTML=userData[player].name;
+		timeDiv.innerHTML="00:50"; 
+		
 		window.sessionStorage.setItem("balls",balls.join(","));
 	}
 
@@ -247,7 +264,12 @@ window.onload=function(){
 	</ul>
 	<img src="img/frame/more.png">
 </div>
-<div id="score">0 0</div>
+<!-- <div id="playerNameTitle"></div>
+<div id="score">0 0</div> -->
+<ul id="title">
+	<li></li>
+	<li></li>
+</ul>
 <div id="main">
 	<div class="playerName">Guest</div>
 	<div class="time">00:50</div>
