@@ -1,19 +1,20 @@
 package com.sep.ballMatch.entity;
 
 public class Status {
-	private double x;
-	private double y;
+	private int x;
+	private int y;
 	private int status;
-	public double getX() {
+
+	public int getX() {
 		return x;
 	}
-	public void setX(double x) {
+	public void setX(int x) {
 		this.x = x;
 	}
-	public double getY() {
+	public int getY() {
 		return y;
 	}
-	public void setY(double y) {
+	public void setY(int y) {
 		this.y = y;
 	}
 	public int getStatus() {
@@ -26,18 +27,7 @@ public class Status {
 	public String toString() {
 		return "Status [x=" + x + ", y=" + y + ", status=" + status + "]";
 	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + status;
-		long temp;
-		temp = Double.doubleToLongBits(x);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(y);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		return result;
-	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -49,9 +39,9 @@ public class Status {
 		Status other = (Status) obj;
 		if (status != other.status)
 			return false;
-		if (Double.doubleToLongBits(x) != Double.doubleToLongBits(other.x))
+		if ((x-other.x) > 2 || (x-other.x) < -2)
 			return false;
-		if (Double.doubleToLongBits(y) != Double.doubleToLongBits(other.y))
+		if ((y-other.y) > 2 ||(y-other.y) < -2)
 			return false;
 		return true;
 	}

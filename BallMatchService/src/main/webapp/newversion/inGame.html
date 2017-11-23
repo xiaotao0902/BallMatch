@@ -15,12 +15,13 @@ window.onload=function(){
 	var timeDiv=document.getElementsByClassName("time")[0];
 	var timeExt=document.getElementById("timeExt");
 	var playerName=document.getElementsByClassName("playerName")[0];
+	var scorePlayerName=playerName.getElementsByTagName("span")[0];
 	var changePlayer=document.getElementById("changePlayer");
 	
 	var playerNameTitle=document.getElementById("playerNameTitle");
 	var oTab=document.getElementById("tab");
-	var title=document.getElementById("title");
-	var titleLi=title.getElementsByTagName("li");
+	//var title=document.getElementById("title");
+	//var titleLi=title.getElementsByTagName("li");
 	var oLiOfTab=oTab.getElementsByTagName("li");
 	
 	//等于当前用户
@@ -32,9 +33,14 @@ window.onload=function(){
 	}else{
 		scoreArr=[0,0];
 	}
-	titleLi[1].innerHTML=scoreArr[0]+"&nbsp;&nbsp;:&nbsp;&nbsp;"+scoreArr[1];
-	playerName.innerHTML=userData[whoStart].name;
-	titleLi[0].innerHTML=userData[0].name+"&nbsp;&nbsp;:&nbsp;&nbsp;"+userData[1].name;
+	//titleLi[1].innerHTML=scoreArr[0]+"&nbsp;&nbsp;:&nbsp;&nbsp;"+scoreArr[1];
+	if(whoStart==null){
+		whoStart=0;
+	}
+	playerName.innerHTML=userData[whoStart].name+"<span>"+scoreArr[whoStart]+"</span>";
+	/* console.log("scorePlayerName "+ scorePlayerName.innerHTML+" whoStart"+whoStart);
+	scorePlayerName.innerHTML=scoreArr[whoStart]; */
+	//titleLi[0].innerHTML=userData[0].name+"&nbsp;&nbsp;:&nbsp;&nbsp;"+userData[1].name;
 	
 	
 	
@@ -93,7 +99,10 @@ window.onload=function(){
 		var player=0;
 		whoStart=whoStart==0?1:0;
 		window.sessionStorage.setItem("whoStart",whoStart);
-		playerName.innerHTML=userData[whoStart].name;
+		playerName.innerHTML=userData[whoStart].name+"<span>"+scoreArr[whoStart]+"</span>";
+		
+		playerName.style.background="url('../newversion/img/playerName"+(whoStart+1)+".png') no-repeat -180px";
+		
 		timeDiv.innerHTML="00:50";
 		player=whoStart==0?"A":"B";
 		$.ajax({
@@ -107,6 +116,7 @@ window.onload=function(){
             	console.log(data);
         	}
 		}); 
+		
 		
 		//window.location.reload();
 	}
@@ -193,23 +203,24 @@ window.onload=function(){
 		//{"player":"A","balls":[0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1]} 
 	    //setMessageInnerHTML(event.data);
 		var data=event.data;
-		console.log(data);
+		console.log("data "+data);
 		data=JSON.parse(data);
 		var balls=data.balls;
-		console.log(balls);
+		console.log("balls "+balls);
 		var oldBalls=window.sessionStorage.getItem("balls");
+		console.log("oldBalls",oldBalls);
 		//判断是不是第一次打
 		if(!!oldBalls){
 			var oldBallArr=oldBalls.split(",");
-			for(var i=0;i<15;i++){
+			for(var i=1;i<16;i++){
 				if(balls[i]==0&&oldBallArr[i]==1){
-					getAGoal(ballArr[i],true);
+					getAGoal(ballArr[i-1],true);
 				}
 			}
 		}else{
-			for(var i=0;i<15;i++){
+			for(var i=1;i<16;i++){
 				if(balls[i]==0){
-					getAGoal(ballArr[i],true);
+					getAGoal(ballArr[i-1],true);
 				}
 			}
 		}
@@ -217,7 +228,8 @@ window.onload=function(){
 		//切换用户
 		var player=data.player=="A"?0:1;
 		window.sessionStorage.setItem("whoStart",player);
-		playerName.innerHTML=userData[player].name;
+		playerName.innerHTML=userData[whoStart].name+"<span>"+scoreArr[whoStart]+"</span>";
+		playerName.style.background="url('../newversion/img/playerName"+(whoStart+1)+".png') no-repeat -180px";
 		timeDiv.innerHTML="00:50"; 
 		
 		window.sessionStorage.setItem("balls",balls.join(","));
@@ -266,12 +278,12 @@ window.onload=function(){
 </div>
 <!-- <div id="playerNameTitle"></div>
 <div id="score">0 0</div> -->
-<ul id="title">
+<!-- <ul id="title">
 	<li></li>
 	<li></li>
-</ul>
+</ul> -->
 <div id="main">
-	<div class="playerName">Guest</div>
+	<div class="playerName">Guest</div>	
 	<div class="time">00:50</div>
 	<div class="btn" id="timeExt">Time Extension</div>
 	<div class="btn" id="changePlayer">Change Player</div>

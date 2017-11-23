@@ -25,7 +25,6 @@ window.onload=function(){
 			headImg[index].onclick=function(){
 				var _index=index;
 				index=index==0?"A":"B";
-				
 				//tell backend who starts the game
 				$.ajax({
 					type: "POST",
@@ -34,14 +33,15 @@ window.onload=function(){
 	            	data: JSON.stringify({
 	            		"player":index
 	            	}),
-	            	dataType:"json",
+	            	//dataType:"json",
 	            	success: function(data){
-	                	//alert(JSON.stringify(data));
 	                	window.sessionStorage.setItem("whoStart",_index);
 	    				window.location.href="vsPlayerProflieScore.html";
+	            	},
+	            	error:function(message){
+	            		alert("error "+message);
 	            	}
 				});
-				
 			}
 		})(i);
 		

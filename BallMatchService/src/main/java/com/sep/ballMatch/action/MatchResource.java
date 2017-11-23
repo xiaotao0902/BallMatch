@@ -1,6 +1,5 @@
 package com.sep.ballMatch.action;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -11,6 +10,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +20,10 @@ import com.sep.ballMatch.entity.GameCache;
 import com.sep.ballMatch.entity.GameProcess;
 import com.sep.ballMatch.entity.GameStatus;
 import com.sep.ballMatch.entity.Result;
+import com.sep.ballMatch.entity.original.GameOriProcess;
+import com.sep.ballMatch.entity.original.GameOriService;
 import com.sep.ballMatch.service.MatchService;
+import com.sep.ballMatch.service.MatchStartService;
 
 @Path("/game") 
 @Produces(MediaType.APPLICATION_JSON + ";charset=UTF-8")
@@ -30,14 +33,20 @@ public class MatchResource extends BaseResource {
 	
 	private MatchService matchService = new MatchService();
 	
+	private GameOriService gameOriService = new GameOriService();
+	
 	@POST
 	@Path("/info") 
 	@Consumes(MediaType.APPLICATION_JSON + ";charset=UTF-8")
 	public Response postGameInfo(String json, @Context HttpServletRequest request) {
 		logger.info(json);
 		Gson gson = new Gson();
-		GameProcess gameProcess = gson.fromJson(json, GameProcess.class);
+		GameOriProcess gameOriProcess = gson.fromJson(json, GameOriProcess.class);
+		//detail the original data
+		GameProcess gameProcess = gameOriService.detailOriginal(gameOriProcess);
+		
 		Result result = matchService.doMatch(gameProcess);
+		
 		return Response.ok(result).build();
 	}
 	
@@ -48,7 +57,13 @@ public class MatchResource extends BaseResource {
 		logger.info(json);
 		Gson gson = new Gson();
 		GameStatus gameStatus = gson.fromJson(json, GameStatus.class);
-		Result result = matchService.startMatch(gameStatus);
+		GameCache.setCurrentPlayer(gameStatus.getPlayer());
+		
+		Thread start = new Thread(new MatchStartService());
+		start.start();
+		Result result = new Result();
+		result.setStatus("ok");
+		
 		return Response.ok(result).build();
 	}
 	

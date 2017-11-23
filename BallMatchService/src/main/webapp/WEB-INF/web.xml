@@ -3,8 +3,17 @@
   <display-name>Archetype Created Web Application</display-name>
   
   <welcome-file-list>
-	<welcome-file>start.html</welcome-file>
+	<welcome-file>newversion/startScreen.html</welcome-file>
   </welcome-file-list>
+  
+   <listener>
+        <listener-class>com.sep.ballMatch.common.Log4j2ConfigListener</listener-class>
+    </listener>
+    <context-param>
+        <description>日志配置文件的路径</description>
+        <param-name>log4j.configurationFile</param-name>
+        <param-value>log4j2.xml</param-value>
+    </context-param>
   
   <servlet>    
       <servlet-name>jersey-restful</servlet-name>    
