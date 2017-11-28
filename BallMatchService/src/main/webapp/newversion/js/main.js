@@ -3,8 +3,8 @@ var userData=[{name:"Tony",summary:"新手请多多指教",scoreLevel:"img/score
  {name:"Alex",summary:"三十年未逢敌手",scoreLevel:"img/scoreLevel/A.png",
 		img:"img/headImg_dingjunhui.png",driver:'img/driver2.png'}];
 
-var contextRoot="/billiardsService/bs/game";
-var websocketPath="ws://localhost:8080/billiardsService/matchSocket";
+var contextRoot="/BallMatchService/bs/game";
+var websocketPath="ws://localhost:8080/BallMatchService/matchSocket";
 
 // whoStart score 保存在sessionStorage
 

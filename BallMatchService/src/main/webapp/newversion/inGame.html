@@ -26,6 +26,7 @@ window.onload=function(){
 	
 	//等于当前用户
 	var whoStart=window.sessionStorage.getItem("whoStart");
+	whoStart=parseInt(whoStart);
 	var score=window.sessionStorage.getItem("score");
 	var scoreArr=[];
 	if(!!score){
@@ -225,11 +226,14 @@ window.onload=function(){
 			}
 		}
 		console.log("data.player",data.player);
+		
+		
 		//切换用户
 		var player=data.player=="A"?0:1;
 		window.sessionStorage.setItem("whoStart",player);
-		playerName.innerHTML=userData[whoStart].name+"<span>"+scoreArr[whoStart]+"</span>";
-		playerName.style.background="url('../newversion/img/playerName"+(whoStart+1)+".png') no-repeat -180px";
+		playerName.innerHTML=userData[player].name+"<span>"+scoreArr[player]+"</span>";
+		
+		playerName.style.background="url('../newversion/img/playerName"+(player+1)+".png') no-repeat -180px";
 		timeDiv.innerHTML="00:50"; 
 		
 		window.sessionStorage.setItem("balls",balls.join(","));
