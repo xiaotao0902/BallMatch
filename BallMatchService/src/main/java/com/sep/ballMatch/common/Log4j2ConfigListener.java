@@ -23,7 +23,6 @@ public class Log4j2ConfigListener implements ServletContextListener
         Configurator.initialize("Log4j2", "classpath:" + fileName);
     }
 
-    @SuppressWarnings("unchecked")
     private String getContextParam(ServletContextEvent event) {
         Enumeration<String> names = event.getServletContext().getInitParameterNames();
         while (names.hasMoreElements())

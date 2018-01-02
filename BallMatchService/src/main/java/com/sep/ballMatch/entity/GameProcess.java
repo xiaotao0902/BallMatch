@@ -1,8 +1,10 @@
 package com.sep.ballMatch.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameProcess {
+	
 	private String gameId;
 	private String tableWidth;
 	private String tableHeight;
@@ -72,15 +74,21 @@ public class GameProcess {
 				+ ", timeStamp=" + timeStamp + ", requestId=" + requestId + ", createdBy=" + createdBy
 				+ ", firstShotPlayerId=" + firstShotPlayerId + ", playerIds=" + playerIds + ", data=" + data + "]";
 	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((data == null) ? 0 : data.hashCode());
-		return result;
-	}
+	
 	@Override
 	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GameProcess other = (GameProcess) obj;
+		if (!equalsWhite(other) || !equalsOthers(other))
+			return false;
+		return true;
+	}
+	public boolean equalsWhite(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -91,19 +99,138 @@ public class GameProcess {
 		if (data == null) {
 			if (other.data != null)
 				return false;
-		} else if (!compareData(data,other.data))
+		} else if (!compareWhite(data,other.data))
 			return false;
 		return true;
 	}
 	
-	private boolean compareData(List<Status> data,List<Status> otherData) {
-		int size = data.size();
-		for(int i = 0 ; i < size ; i++) {
-			if(!data.get(i).equals(otherData.get(i))) {
+	public boolean equalsOthers(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GameProcess other = (GameProcess) obj;
+		if (data == null) {
+			if (other.data != null)
+				return false;
+		} else if (!compareOthers(data,other.data))
+			return false;
+		return true;
+	}
+	
+	public boolean equalsFull(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GameProcess other = (GameProcess) obj;
+		if (data == null) {
+			if (other.data != null)
+				return false;
+		} else if (!compareFull(data,other.data))
+			return false;
+		return true;
+	}
+	
+	public boolean equalsHalf(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GameProcess other = (GameProcess) obj;
+		if (data == null) {
+			if (other.data != null)
+				return false;
+		} else if (!compareHalf(data,other.data))
+			return false;
+		return true;
+	}
+	
+	public boolean ifWhiteInHole() {
+		int status = 0;
+		if(this.data != null ) {
+			status = this.data.get(0).getStatus();
+			if(status == 0 ) {
+				return true;
+			}
+			else {
 				return false;
 			}
 		}
-		
+		return false;
+	}
+	
+	public boolean ifOthersInHole(GameProcess other) {
+		if(other == null && this.data != null) {// first kick
+			for(Status s : data) {
+				if(s.getStatus() == 0 ) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+		}
+		else if(this.data != null && other != null) {// not first kick 
+			List<Status> otherData = other.getData();
+			for(int i = 1 ; i < 16 ; i++) {
+				if(this.data.get(i).getStatus()==1 && otherData.get(i).getStatus()==0) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public List<Integer> ifOthersInHoleResult(GameProcess other) {
+		List<Integer> list = new ArrayList<Integer>();
+		List<Status> otherData = other.getData();
+		for(int i = 1 ; i < 16 ; i++) {
+			if(this.data.get(i).getStatus()==1 && otherData.get(i).getStatus()==0) {
+				list.add(i);
+			}
+		}
+		return list;
+	}
+	
+	private boolean compareOthers(List<Status> data,List<Status> otherData) {
+		int size = data.size();
+		for(int i = 1 ; i < size ; i++) {
+			if(!data.get(i).equalsOthers(otherData.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private boolean compareWhite(List<Status> data,List<Status> otherData) {
+		if(!data.get(0).equalsWhite(otherData.get(0))) {
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean compareFull(List<Status> data,List<Status> otherData) {
+		for(int i = 1 ; i < 8 ; i++) {
+			if(!data.get(i).equalsOthers(otherData.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private boolean compareHalf(List<Status> data,List<Status> otherData) {
+		for(int i = 7; i < 16 ; i++) {
+			if(!data.get(i).equalsOthers(otherData.get(i))) {
+				return false;
+			}
+		}
 		return true;
 	}
 	

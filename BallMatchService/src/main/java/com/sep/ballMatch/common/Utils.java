@@ -123,8 +123,7 @@ public class Utils {
 
 	public static String getTimeStampToTD(){
 		Calendar calendar = Calendar.getInstance();    
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.CHINA); 
-		simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));   
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA); 
 	    String utcTime =simpleDateFormat.format(calendar.getTime());  
 	    //System.out.println(utcTime);
 		return utcTime;
@@ -133,7 +132,7 @@ public class Utils {
 	public static String getTimeStampToTD(Date date){
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.CHINA); 
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA); 
 		simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));   
 	    String utcTime =simpleDateFormat.format(calendar.getTime());  
 	    //System.out.println(utcTime);
@@ -147,5 +146,14 @@ public class Utils {
     	return str.replaceFirst(str.substring(0, 1),str.substring(0, 1).toUpperCase());
     	}
     }
+	
+	public static long getTimeMillis() {
+		long timeMillis = Calendar.getInstance().getTimeInMillis();
+		return timeMillis;
+	}
+	
+	public static void main(String args[]) {
+		System.out.println(getTimeStampToTD());
+	}
 	
 }

@@ -19,7 +19,6 @@ public class MatchStartService implements Runnable {
 			logger.error(LogUtils.getExceptionToString(e));
 			e.printStackTrace();
 		}
-
 	}
 
 }

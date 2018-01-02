@@ -1,6 +1,12 @@
 package com.sep.ballMatch.entity;
 
+import com.sep.ballMatch.common.PropUtil;
+
 public class Status {
+	
+	private int verify_move_white = Integer.parseInt(PropUtil.getProperty("verify_move_white"));
+	private int verify_move = Integer.parseInt(PropUtil.getProperty("verify_move"));
+	
 	private int x;
 	private int y;
 	private int status;
@@ -28,8 +34,7 @@ public class Status {
 		return "Status [x=" + x + ", y=" + y + ", status=" + status + "]";
 	}
 
-	@Override
-	public boolean equals(Object obj) {
+	public boolean equalsWhite(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -39,10 +44,28 @@ public class Status {
 		Status other = (Status) obj;
 		if (status != other.status)
 			return false;
-		if ((x-other.x) > 2 || (x-other.x) < -2)
+		if ((x - other.x) > verify_move_white || (x - other.x) < - verify_move_white)
 			return false;
-		if ((y-other.y) > 2 ||(y-other.y) < -2)
+		if ((y - other.y) > verify_move_white || (y - other.y) < - verify_move_white)
 			return false;
 		return true;
 	}
+	
+	public boolean equalsOthers(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Status other = (Status) obj;
+		if (status != other.status)
+			return false;
+		if ((x - other.x) > verify_move || (x - other.x) < - verify_move)
+			return false;
+		if ((y - other.y) > verify_move || (y - other.y) < - verify_move)
+			return false;
+		return true;
+	}
+	
 }

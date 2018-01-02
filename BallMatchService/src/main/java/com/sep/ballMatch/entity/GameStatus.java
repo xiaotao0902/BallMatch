@@ -5,6 +5,7 @@ import java.util.List;
 public class GameStatus {
 	private String player;
 	private List<Integer> balls;
+	private String choose;
 	
 	public String getPlayer() {
 		return player;
@@ -18,4 +19,11 @@ public class GameStatus {
 	public void setBalls(List<Integer> balls) {
 		this.balls = balls;
 	}
+	public String getChoose() {
+		return choose;
+	}
+	public void setChoose(String choose) {
+		this.choose = choose;
+	}
+	
 }

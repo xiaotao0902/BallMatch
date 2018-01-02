@@ -23,15 +23,26 @@ window.onload=function(){
 	for(var i=0;i<headImg.length;i++){
 		(function(index){
 			headImg[index].onclick=function(){
-				var _index=index;
 				index=index==0?"A":"B";
+				
+				var _index;
+				var _vs_index;
+				if(index=="A"){
+					_index = 0;
+					_vs_index = 1;
+				}else{
+					_vs_index = 0;
+					_index = 1;
+				}
 				//tell backend who starts the game
 				$.ajax({
 					type: "POST",
 					contentType: "application/json; charset=utf-8",
 	            	url: contextRoot+"/start",
 	            	data: JSON.stringify({
-	            		"player":index
+	            		"player":index,
+	            		"user_id":userData[_index].id,
+	            		"vs_user_id":userData[_vs_index].id,
 	            	}),
 	            	//dataType:"json",
 	            	success: function(data){
