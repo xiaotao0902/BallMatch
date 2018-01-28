@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>VS Player Profile Score</title>
+<link href="css/common.css" type="text/css" rel="stylesheet" />
+<link href="css/vsPlayerProfileScore.css" type="text/css" rel="stylesheet" />
+<script src="js/main.js" type="text/javascript"></script>
+<link rel="stylesheet" href="lib/bootstrap3.3.7.min.css">
+<script src="lib/jquery2.1.1.min.js" type="text/javascript"></script>
+<script src="lib/bootstrap3.3.7.min.js" type="text/javascript"></script>
+<script>
+window.onload=function(){
+	var whoStart=window.sessionStorage.getItem("whoStart");
+	
+	$(document).click(function(){
+		window.location.href="inGame.html";
+	});
+	
+	var score=window.sessionStorage.getItem("score");
+	var scoreArr=[];
+	if(!!score){
+		scoreArr=score.split(",");
+	}else{
+		scoreArr=[0,0];
+	}
+	var whoWin=-1;
+	
+	for(var i=0;i<2;i++){
+		if(scoreArr[i]==7){
+			whoWin=i;
+			break;
+		}
+	}
+	if(whoWin>-1){
+		$(document).unbind("click");
+		window.sessionStorage.setItem("whoWin",whoWin);
+		setTimeout(function(){
+			window.location.href="winnerPage.html";
+		},3000);
+		
+	}
+	for(var i=0;i<2;i++){
+		console.log("userData[i].name ",userData[i].name);
+		$("#page3 .name").eq(i).html(userData[i].name);
+		$("#page3 .scoreImg").eq(i).attr("src","img/scorepage/"+scoreArr[i]+".png");
+	}
+	
+	/* setTimeout(function(){
+		//判断用户是否是会员 会员可享受特定皮肤界面 inGame1.html
+		if(userData[whoStart].isVip){
+			window.location.href="inGame1.html";
+		}else{
+			window.location.href="inGame.html";
+		}
+	},3000); */
+};
+
+</script>
+</head>
+<body class="scoreBody">
+<div class="container" id="page3">
+	<div class="row">
+		<div class="col-lg-6 lmy_relative text-center">
+			<img class="scoreImg" src="img/scorepage/0.png" />
+			<div class="name">访客</div>
+		</div>
+		<div class="col-lg-6 lmy_relative text-center">
+			<img class="scoreImg" src="img/scorepage/0.png" />
+			<div class="name">董路</div>
+		</div>
+	</div>
+</div>
+<img src="img/logo/Logo(red).png" class="logo2"/>
+</body>
+</html>

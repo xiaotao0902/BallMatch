@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Start Screen</title>
+<link rel="stylesheet" href="lib/bootstrap3.3.7.min.css">
+<script src="lib/jquery2.1.1.min.js" type="text/javascript"></script>
+<script src="lib/bootstrap3.3.7.min.js" type="text/javascript"></script>
+<link href="css/common.css" type="text/css" rel="stylesheet" />
+<script src="js/main.js" type="text/javascript"></script>
+<script>
+	$(document).ready(function() {
+		$("#menuDiv1 li").click(function() {
+			$("#menuDiv1 li").each(function() {
+				$(this).removeClass("active");
+			});
+			$(this).addClass("active");
+
+			var left = calculate($(this).index());
+			$("#bottom").css("left", left);
+
+			//默认点击挑战模式 ，会出现登录
+			if ($(this).index() == 3) {
+				showMask();
+				$("#loginDiv").show();
+			}
+		});
+
+		$("#menuDiv1 li").hover(function() {
+			var left = calculate($(this).index());
+			$("#bottom").css("left", left);
+		}, function() {
+			$("#menuDiv1 li").each(function() {
+				if ($(this).hasClass("active")) {
+					var left = calculate($(this).index());
+					$("#bottom").css("left", left);
+				}
+			});
+		});
+
+		function calculate(index) {
+			return index * 100 + "px";
+		}
+		
+		$("#mask").click(function(){
+			$("#mask").hide();
+			$("#loginDiv").hide();
+		});
+		
+		//点击快速模式进入选人开球页面
+		$("#img1").click(function(){
+			window.location.href="vsPlayerProfile.html";
+		});
+	});
+
+	function showMask() {
+		/* $("#mask").css("height", $(document).height());
+		$("#mask").css("width", $(document).height()); */
+		$("#mask").show();
+	}
+</script>
+</head>
+<body>
+	<div id="userInfo">
+		<ul>
+			<li>董路</li>
+			<li><img src="img/page1/headPic.png" /></li>
+			<li>访客</li>
+			<li><img src="img/page1/vistorPic.png" /></li>
+		</ul>
+	</div>
+	<div class="container main" id="startScreen">
+		<div class="row">
+			<div class="col-sm-6 col-md-4 col-lg-3 ">
+				<img id="img1" src="img/page1/Race to_all.png" />
+			</div>
+			<div class="col-sm-6 col-md-4 col-lg-3 ">
+				<img id="img2" src="img/page1/League_all.png" />
+			</div>
+			<div class="col-sm-6 col-md-4 col-lg-3 ">
+				<img id="img3" src="img/page1/Fun_all.png" />
+			</div>
+			<div class="col-sm-6 col-md-4 col-lg-3 ">
+				<img id="img4" src="img/page1/Shop_all.png" />
+			</div>
+			<div class="col-lg-12">
+				<div class="bottomImg">
+					<img id="bottomA" src="img/page1/bottomA.png" /> <img
+						id="bottom" src="img/page1/bottom.png" />
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="menuDiv1" class="col-lg-9">
+		<ul class="nav nav-pills">
+			<li class="active"><img src="img/bottom_menu/bm1.png" /></li>
+			<li><img src="img/bottom_menu/bm2.png" /></li>
+			<li><img src="img/bottom_menu/bm3.png" /></li>
+			<li><img src="img/bottom_menu/bm4.png" /></li>
+			<li><img src="img/bottom_menu/bm5.png" /></li>
+		</ul>
+	</div>
+	<div class="logo">
+		<img src="img/logo/Logo(Black).png">
+	</div>
+	<div id="loginDiv">
+		<img src="img/page1/erWeiMa.png" />
+	</div>
+	<div id="mask" class="mask"></div>
+</body>
+</html>

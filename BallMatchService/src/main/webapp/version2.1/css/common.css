@@ -1,0 +1,241 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	text-decoration: none;
+	/* color: #B1D9E7; */
+	color:#fff;
+}
+
+body {
+	margin: 0;
+	/* background:#343A47; */
+	overflow: hidden;
+	background: url('../img/background.gif') no-repeat;
+}
+
+@media screen and (max-width: 1280px) {
+	#startScreen {
+		top: 200px;
+		position: relative;
+	}
+}
+
+@media screen and (min-width: 1367px) and (max-width:1440px) {
+	#startScreen {
+		top: 100px;
+		position: relative;
+	}
+}
+
+#menuDiv{position:absolute;right:180px;top:-330px;text-align:center;z-index:1;}
+#menuUl{position:relative;margin-left:10px;}
+#menuUl li{margin:5px;width:120px;background:url('../img/btn.png') no-repeat;background-size:120px 60px;
+height:60px;line-height:60px;text-align:center;;cursor:pointer;}
+#menuDiv img{width:150px;cursor:pointer;}
+
+ul li {
+	list-style: none;
+}
+
+.fontType {
+	background-image: -webkit-gradient(linear, 0 0, 0 bottom, from(rgba(253, 255, 255, 1)),
+		to(rgba(165, 252, 249, 1)));
+	font-weight: bold;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	font-size: 50px;
+}
+
+.lmy_relative {
+	position: relative;
+}
+
+#userInfo {
+	position: fixed;
+	right: 30px;
+	width: 230px;
+	top: 30px;
+}
+
+#userInfo li {
+	background: url('../img/page1/userBg.png');
+	background-size: 100px 50px;
+	display: inline-block;
+	width: 50px;
+	height: 50px;
+	float: left;
+	font-size: 20px;
+	color: #fff;
+	line-height: 50px;
+	text-align: center;
+}
+
+#userInfo li:nth-of-type(odd) {
+	width: 60px;
+}
+
+#userInfo img {
+	width: 40px;
+	height: 40px;
+}
+
+.main {
+	margin-top: 100px;
+}
+
+.main img {
+	width: 120%;
+	cursor:pointer;
+}
+
+.bottomImg {
+	position: relative;
+	margin: 0 auto;
+	width: 500px;
+}
+
+.main #bottomA,.main #bottom {
+	position: absolute;
+	top: 30px;
+}
+
+#bottom {
+	width: 100px;
+}
+
+#bottomA {
+	width: 500px;
+}
+
+#menuDiv1 {
+	position: absolute;
+	bottom: 20px;
+	left: 60px;
+	width: 100%;
+}
+
+#menuDiv1 li {
+	height: 77px;
+	cursor: pointer;
+	font-size: 20px;
+	color: #fff;
+}
+
+#menuDiv1 li.active,#menuDiv1 li:hover {
+	background: url('../img/bottom_menu/background.png');
+}
+
+.logo {
+	width: 180px;
+	position: fixed;
+	right: 40px;
+	bottom: -20px;
+}
+
+.mask {
+	position: absolute;
+	top: 0px;
+	filter: alpha(opacity =   60);
+	background-color: #777;
+	z-index: 100;
+	left: 0px;
+	opacity: 0.5;
+	-moz-opacity: 0.5;
+	width:100%;
+	height:100%;
+	display:none;
+}
+
+#loginDiv {
+	z-index: 101;
+	display: none;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 900px;
+	height: 500px;
+	margin-left: -450px;
+	margin-top: -250px;
+	background: url('../img/page1/login.png') no-repeat;
+	background-size: contain;
+}
+
+#loginDiv img {
+	position: relative;
+	left: 50%;
+	top: 50%;
+	width: 300px;
+	height: 300px;
+	margin-left: -150px;
+	margin-top: -150px;
+}
+/*
+	page2
+*/
+
+
+.moreBtn {
+	position: absolute;
+	right: 100px;
+	top: 0;
+	width: 300px;
+	cursor: pointer;
+}
+
+.listBtn {
+	position: absolute;
+	right: 100px;
+	height:300px;
+	top:50%;
+	margin-top:-150px;
+}
+
+.listBtn img {
+	width: 300px;
+	cursor: pointer;
+}
+
+
+.ball {
+	width: 1100px;
+	position: absolute;
+	bottom: 0;
+	right: 30px;
+	height: 100px;
+}
+
+.ball img {
+	cursor: pointer;
+	float: left;
+	margin: 10px;
+	width: 50px;
+	position: relative;
+}
+
+#time {
+	position: absolute;
+	font-size: 50px;
+	left: 420px;
+	top: 20px;
+}
+
+/* 
+#page2 div.col-lg-6:nth-of-type(2) {
+	margin-top: 80px;
+	height: 600px;
+	background: url('../img/page2/userBg.png') no-repeat,
+		url('../img/page2/headBorder2.png') no-repeat;
+	background-size: 400px, 200px;
+	background-position: 100px, 200px 50px;
+} */
+
+#ballDiv{position:absolute;bottom:0;width:100%;overflow:hidden;}
+#ballDiv1{width:1200px;height:100px;margin:0 auto;
+padding:100px 0;}
+#ballDiv ul li{width:50px;height:50px;float:left;margin:0 5px;position:relative;}
+#ballDiv ul li:first-child{margin-right:50px;}
+#ballDiv ul li:nth-of-type(8){margin:0 50px;width:80px;height:80px;}
+#ballDiv ul li:nth-of-type(8) img{margin-top:-10px;}
+#ballDiv ul li:last-child{margin-left:50px;}
+#ballDiv img{width:100%;height:100%;display:inline-block;opacity:1;}

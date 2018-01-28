@@ -1,0 +1,26 @@
+.scoreBody{
+	background:url('../img/scorepage/bg.gif') no-repeat;
+	background-size:cover;
+}
+
+#page3 {
+	position:relative;
+	top: 250px;
+}
+
+#page3 img{
+	width:300px;
+}
+
+#page3 .name {
+	width: 400px;
+	text-align: center;
+	position: relative;
+	height: 50px;
+	line-height: 50px;
+	font-size: 50px;
+	margin: 0 100px;
+	top: -380px;
+	background: #000;
+	z-index: 12;
+}

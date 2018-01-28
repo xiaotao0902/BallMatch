@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>VS Player Profile</title>
+<link href="css/common.css" type="text/css" rel="stylesheet" />
+<link href="css/vsPlayerProfile.css" type="text/css" rel="stylesheet" />
+<script src="js/main.js" type="text/javascript"></script>
+<link rel="stylesheet" href="lib/bootstrap3.3.7.min.css">
+<script src="lib/jquery2.1.1.min.js" type="text/javascript"></script>
+<script src="lib/bootstrap3.3.7.min.js" type="text/javascript"></script>
+<script>
+$(document).ready(function(){
+	$("#mask").one("click",function(){
+		$("#mask").hide();
+		$("#choose").hide();
+	}); 
+	
+	$("#mask").css("height", $(document).height());
+	$("#mask").css("width", $(document).width());
+	$("#mask").show();
+	var headImg=$(".headImg");
+	
+	for(var i=0;i<headImg.length;i++){
+		(function(index){
+			headImg.eq(index).click(function(){
+				index=index==0?"A":"B";
+				var _index;
+				var _vs_index;
+				if(index=="A"){
+					_index = 0;
+					_vs_index = 1;
+				}else{
+					_vs_index = 0;
+					_index = 1;
+				}
+				
+				window.sessionStorage.setItem("whoStart",_index);
+				window.location.href="vsPlayerProfileScore.html";
+				
+				//tell backend who starts the game
+				/* $.ajax({
+					type: "POST",
+					contentType: "application/json; charset=utf-8",
+	            	url: contextRoot+"/start",
+	            	data: JSON.stringify({
+	            		"player":index,
+	            		"user_id":userData[_index].id,
+	            		"vs_user_id":userData[_vs_index].id,
+	            	}),
+	            	//dataType:"json",
+	            	success: function(data){
+	                	window.sessionStorage.setItem("whoStart",_index);
+	    				window.location.href="vsPlayerProflieScore.html";
+	            	},
+	            	error:function(message){
+	            		alert("error "+message);
+	            	}
+				});  */
+			});
+			
+		})(i);
+		
+		console.log(userData);
+		if(i==1){
+			headImg.eq(i).attr("src",userData[i].img);
+			$(".fontType").eq(i).html(userData[i].name);
+			$(".title1").eq(0).html(userData[i].summary);
+			$(".title2").eq(0).html(userData[i].summary1);
+			$(".title3").eq(0).html(userData[i].level);
+			$("#div1").append('<img class="scoreLevel" src="'+userData[i].scoreLevel+'" />');
+			draw(75,65.5,userData[i].kda,"myCanvas"+i);
+		}
+	} 
+});
+</script>
+</head>
+<body>
+<div class="container" id="page2">
+	<div class="row">
+		<div class="col-lg-6 text-center lmy_relative" id="div0">
+			<img class="head1 headImg" src="img/vistorHead.png" />
+			<span class="name fontType">访客</span>
+ 		</div>
+		<div class="col-lg-6 text-center lmy_relative" id="div1">
+			<div class="row">
+				<div class="profile">
+					<img class="head2 headImg" src="img/head2.png" />
+					<ul>
+						<!-- <li><span class="fontType">董路</span></li>
+						<li><span class="title1">我真是个天才</span></li>
+						<li><span class="title2">&lt;数学天才&gt;</span></li>
+						<li><span class="level">级别:</span><span class="level1 title3">4.82</span></li> -->
+						<li><span class="fontType"></span></li>
+						<li><span class="title1"></span></li>
+						<li><span class="title2"></span></li>
+						<li><span class="level">级别:</span><span class="level1 title3"></span></li>
+					</ul>
+				</div>
+			</div>
+			<div class="kda">
+				<!-- 添加canvas标签，并加上红色边框以便于在页面上查看 -->
+				<canvas id="myCanvas1" width="131px" height="150px">
+					您的浏览器不支持canvas标签。
+				</canvas>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="logo2">
+	<img src="img/logo/Logo(red).png" />
+</div>
+<div id="choose">请选择开球方</div>
+<div id="mask" class="mask"></div>
+</body>
+</html>

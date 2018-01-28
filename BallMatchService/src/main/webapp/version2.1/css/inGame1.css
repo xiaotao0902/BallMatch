@@ -1,0 +1,234 @@
+.body2 {
+	background: url('../img/scorepanel/2.png') no-repeat,
+		url('../img/ingame1/bodyBg.png') no-repeat,
+		url('../img/ingame/bodyBg.png') no-repeat;
+	background-size: 100% 100%, cover, cover;
+	background-position: right, center, center;
+}
+
+#tab {
+	width: 300px;
+	height: 580px;
+	background: #716C6A;
+	border-radius: 10px;
+	/* background:url('../img/btn1.png') no-repeat;
+background-size:300px 600px; */
+	position: absolute;
+	right: -320px;
+	top: 70px;
+}
+
+#tab ul li {
+	margin: 50px 10px 0;
+	height: 100px;
+	width: 280px;
+	background: url('../img/btn.png') no-repeat;
+	background-size: 280px 100px;
+	font-size: 20px;
+	text-align: center;
+	line-height: 100px;
+}
+
+#tab ul li:first-child {
+	margin: 100px 10px 0;
+}
+
+.left1 .infor li:nth-of-type(1) {
+	background-image: -webkit-gradient(linear, 0 0, 0 bottom, from(rgba(254, 255, 244, 1)),
+		to(rgba(235, 249, 52, 1)));
+}
+
+.left1 .infor li:nth-of-type(3) {
+	margin-top: 10px;
+}
+
+.left1 .infor .scoreLevel {
+	position: absolute;
+	width: 200px;
+	top: 50px;
+	left: 250px;
+}
+
+.left1 .infor .lianji,.left1 .infor .lianji1 {
+	position: absolute;
+	width: 200px;
+	top: -50px;
+	left: 350px;
+}
+
+.left1 .infor .lianji1 {
+	position: absolute;
+	width: 300px;
+	top: -100px;
+	left: 430px;
+}
+
+.left1 .steps img {
+	width: 50px;
+}
+
+.left1 .steps {
+	text-align: left;
+	margin-left: 70px;
+	position: relative;
+	font-size: 20px;
+}
+
+.left1 .steps .li1 {
+	font-size: 25px;
+}
+
+.left1 .steps .li1 img {
+	width: 100px;
+}
+
+.left1 .steps .li1 .img1 {
+	margin-left: -5px;
+}
+
+.left1 .steps li img:nth-of-type(1) {
+	margin-left: 20px;
+}
+
+#step {
+	height: 320px;
+	overflow: hidden;
+}
+
+.left1 .infor li:nth-of-type(1) {
+	background-image: -webkit-gradient(linear, 0 0, 0 bottom, from(rgba(254, 255, 244, 1)),
+		to(rgba(235, 249, 52, 1)));
+}
+
+.left1 .infor .scoreLevel {
+	position: absolute;
+	width: 200px;
+	top: 50px;
+	left: 250px;
+}
+
+.left1 .infor .lianji,.left1 .infor .lianji1 {
+	position: absolute;
+	width: 200px;
+	top: -50px;
+	left: 350px;
+}
+
+.left1 .infor .lianji1 {
+	position: absolute;
+	width: 300px;
+	top: -100px;
+	left: 430px;
+}
+
+.left1 .steps img {
+	width: 50px;
+}
+
+.left1 .steps .li1 {
+	font-size: 25px;
+}
+
+.left1 .steps li:nth-of-type(2) {
+	margin-top: -10px;
+}
+
+.left1 .steps .li1 img {
+	width: 100px;
+}
+
+.left1 .steps .li1 .img1 {
+	margin-left: -5px;
+}
+
+.left1 .steps li img:nth-of-type(1) {
+	margin-left: 20px;
+}
+
+@media screen and (max-width: 1280px) {
+	.left1 {
+		width: 400px;
+		background: url('../img/ingame1/bg.png') no-repeat;
+		background-size: cover;
+		background-position: -50px;
+	}
+	.left1 .head {
+		width: 300px;
+		position: relative;
+		left: 30px;
+		top: 60px;
+	}
+	.left1 ul.infor {
+		margin-top: 80px;
+		margin-left: 30px;
+		font-size: 30px;
+		position: relative;
+	}
+	#step {
+		height: 320px;
+		overflow: hidden;
+	}
+}
+
+/* media 1366*/
+@media screen and (min-width: 1281px) and (max-width: 1366px) {
+	.left1 {
+		width: 400px;
+		background: url('../img/ingame1/bg.png') no-repeat;
+		background-size: cover;
+		background-position: -38px;
+	}
+	.left1 .head {
+		width: 250px;
+		position: relative;
+		left: -28px;
+		top: 35px;
+	}
+	.left1 ul.infor {
+		margin-top: 10px;
+		margin-left: -40px;
+		font-size: 25px;
+		position: relative;
+	}
+	.left1 .steps {
+		text-align: left;
+		margin-left: 50px;
+		position: relative;
+		font-size: 20px;
+		margin-top: -10px;
+	}
+	#step {
+		height: 270px;
+		overflow: hidden;
+	}
+}
+
+@media screen and (min-width: 1440px) {
+	.left1 {
+		width: 400px;
+		background: url('../img/ingame1/bg.png') no-repeat;
+		background-size: cover;
+		background-position: -43px;
+	}
+	.left1 .head {
+		width: 250px;
+		position: relative;
+		top: 60px;
+	}
+	.left1 ul.infor {
+		margin-top: 77px;
+		margin-left: -10px;
+		font-size: 25px;
+		position: relative;
+	}
+	.left1 .steps {
+		text-align: left;
+		margin-left: 60px;
+		position: relative;
+		font-size: 20px;
+	}
+	#step {
+		height: 270px;
+		overflow: hidden;
+	}
+}
