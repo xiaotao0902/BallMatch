@@ -19,6 +19,11 @@ body {
 		top: 200px;
 		position: relative;
 	}
+	#ballDiv{position:absolute;left:200px;bottom:-100px;overflow:hidden;z-index:100;padding-left:100px;}
+}
+
+@media screen and (min-width:1281px) and (max-width:1366px){
+	#ballDiv{position:absolute;left:250px;bottom:0;overflow:hidden;z-index:100;padding-left:50px;}
 }
 
 @media screen and (min-width: 1367px) and (max-width:1440px) {
@@ -26,6 +31,7 @@ body {
 		top: 100px;
 		position: relative;
 	}
+	#ballDiv{position:absolute;left:200px;bottom:0;overflow:hidden;z-index:100;padding-left:200px;}
 }
 
 #menuDiv{position:absolute;right:180px;top:-330px;text-align:center;z-index:1;}
@@ -230,12 +236,12 @@ ul li {
 	background-position: 100px, 200px 50px;
 } */
 
-#ballDiv{position:absolute;bottom:0;width:100%;overflow:hidden;}
-#ballDiv1{width:1200px;height:100px;margin:0 auto;
+/* #ballDiv{position:absolute;left:200px;bottom:0;overflow:hidden;z-index:100;padding-left:100px;} */
+#ballDiv1{width:1050px;height:100px;margin:0 auto;
 padding:100px 0;}
 #ballDiv ul li{width:50px;height:50px;float:left;margin:0 5px;position:relative;}
-#ballDiv ul li:first-child{margin-right:50px;}
+/* #ballDiv ul li:first-child{margin-right:50px;} */
 #ballDiv ul li:nth-of-type(8){margin:0 50px;width:80px;height:80px;}
 #ballDiv ul li:nth-of-type(8) img{margin-top:-10px;}
-#ballDiv ul li:last-child{margin-left:50px;}
+/* #ballDiv ul li:last-child{margin-left:50px;} */
 #ballDiv img{width:100%;height:100%;display:inline-block;opacity:1;}
