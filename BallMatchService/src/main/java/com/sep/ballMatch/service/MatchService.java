@@ -45,8 +45,8 @@ public class MatchService {
 				gameStore.setUser_id(GameCache.user_id);
 				gameStore.setVs_user_id(GameCache.vs_user_id);
 				
-				Thread startSql = new Thread(new MatchMySqlDataService(gameStore));
-				startSql.start();
+//				Thread startSql = new Thread(new MatchMySqlDataService(gameStore));
+//				startSql.start();
 				
 				GameCache.first_kick = true;
 				handleCV(current);
@@ -75,9 +75,7 @@ public class MatchService {
 				gameStore.setMatchId(GameCache.matchId);
 				gameStore.setPlayer(gameStatus.getPlayer());
 				gameStore.setData(current.getData());
-				gameStore.setUser_id(GameCache.user_id);
-				gameStore.setVs_user_id(GameCache.vs_user_id);
-				gameStore.setResult(GameCache.result);
+				gameStore.setTimestamp(Utils.getTimeStampToTD());
 				
 				Thread startCloudant = new Thread(new MatchCloudantDataService(gameStore));
 				startCloudant.start();

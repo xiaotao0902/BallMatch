@@ -3,9 +3,11 @@ package com.sep.ballMatch.entity;
 import java.util.List;
 
 public class GameStatus {
-	private String player;
-	private List<Integer> balls;
-	private String choose;
+	private String player;//player : A , B
+	private List<Integer> balls;// balls info
+	private String choose;//full ball, half ball
+	private List<GameRound> gameRound;
+	private String doubleKill;
 	
 	public String getPlayer() {
 		return player;
@@ -24,6 +26,19 @@ public class GameStatus {
 	}
 	public void setChoose(String choose) {
 		this.choose = choose;
+	}
+
+	public List<GameRound> getGameRound() {
+		return gameRound;
+	}
+	public void setGameRound(List<GameRound> gameRound) {
+		this.gameRound = gameRound;
+	}
+	public String getDoubleKill() {
+		return doubleKill;
+	}
+	public void setDoubleKill(String doubleKill) {
+		this.doubleKill = doubleKill;
 	}
 	
 }

@@ -166,21 +166,19 @@ public class GameProcess {
 		return false;
 	}
 	
-	public boolean ifOthersInHole(GameProcess other) {
-		if(other == null && this.data != null) {// first kick
+	public boolean ifOthersInHole(GameProcess last) {
+		if(last == null && this.data != null) {// first kick
 			for(Status s : data) {
 				if(s.getStatus() == 0 ) {
 					return true;
 				}
-				else {
-					return false;
-				}
 			}
+			return false;
 		}
-		else if(this.data != null && other != null) {// not first kick 
-			List<Status> otherData = other.getData();
+		else if(this.data != null && last != null) {// not first kick 
+			List<Status> lastData = last.getData();
 			for(int i = 1 ; i < 16 ; i++) {
-				if(this.data.get(i).getStatus()==1 && otherData.get(i).getStatus()==0) {
+				if(this.data.get(i).getStatus()==0 && lastData.get(i).getStatus()==1) {
 					return true;
 				}
 			}

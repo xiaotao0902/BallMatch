@@ -11,6 +11,8 @@ import com.sep.ballMatch.common.PropUtil;
 import com.sep.ballMatch.entity.ChooseBeen;
 import com.sep.ballMatch.entity.GameCache;
 import com.sep.ballMatch.entity.GameProcess;
+import com.sep.ballMatch.entity.GameRound;
+import com.sep.ballMatch.entity.GameRoundList;
 import com.sep.ballMatch.entity.GameStatus;
 import com.sep.ballMatch.entity.Status;
 
@@ -21,6 +23,12 @@ public class MatchHandleCVDataService {
 	public GameStatus handleCVdata(GameProcess last,GameProcess current) {
 		GameStatus gameStatus = new GameStatus();
 		if(!GameCache.first_kick) {// not first time 
+			
+			if(!GameCache.choose_flag) {// to do which play kick which part ball
+				logger.info("to do which play kick which part ball");
+				chooseFullOrHalf(last,current);
+			}
+			
 			logger.info("not first time");
 		    if(last.equals(current)) {//the ball didn't move
 		    	logger.info("the ball didn't move");
@@ -42,12 +50,6 @@ public class MatchHandleCVDataService {
 					gameStatus = matchNormalRull(last,current);
 				}
 				
-				if(!GameCache.choose_flag) {// to do which play kick which part ball
-					logger.info("to do which play kick which part ball");
-					chooseFullOrHalf(last,current);
-					gameStatus.setChoose(GameCache.choose);
-
-				}
 			}
 		}else {// first time to kick 
 			logger.info("first time to do");
@@ -118,7 +120,7 @@ public class MatchHandleCVDataService {
 			logger.info("matchNormalRul : if white ball move, others not move");
 			GameCache.white_move = true;
 		} 
-		else if (!last.ifOthersInHole(current)) {// if no ball in the hole, change player
+		else if (!current.ifOthersInHole(last)) {// if no ball in the hole, change player
 			logger.info("matchNormalRul : if no ball in the hole, change player");
 			GameCache.doSwith();
 		}
@@ -138,8 +140,94 @@ public class MatchHandleCVDataService {
 		}
 		gameStatus.setBalls(balls);
 		gameStatus.setPlayer(GameCache.currentPlayer);
+		gameStatus.setChoose(GameCache.choose);
 		
+		//set round 
+		if(!"".equals(GameCache.choose)) {
+			GameRoundList currentRound = new GameRoundList();
+			currentRound.setPlayer(GameCache.currentPlayer);
+			currentRound.setBalls(balls);
+			
+			GameCache.STACK.push(currentRound);
+			
+			GameRoundList lastRound = new GameRoundList();
+			String lastPlayer = "" ;
+			List<Integer> lastRoundBalls = new ArrayList<Integer>();
+			List<String> gameRound_ball = new ArrayList<String>();
+			
+			if (GameCache.STACK.size() > 1) {
+				lastRound = GameCache.STACK.getLastball();
+				lastPlayer = lastRound.getPlayer();
+				lastRoundBalls = lastRound.getBalls();
+				gameRound_ball = generateBallNum(lastRoundBalls,balls);
+			}else {
+				lastRound = GameCache.STACK.getCurrentball();
+				lastPlayer = lastRound.getPlayer();
+				gameRound_ball = generateBallNum(balls);
+			}
+			String currentPlayer = currentRound.getPlayer();
+			
+			if("A".equals(currentPlayer)) {
+				GameRound gameRound_A = new GameRound();
+				if(lastPlayer.equals(currentPlayer)) {
+					GameCache.double_kill_A ++;
+					
+				}else {
+					GameCache.round_A ++;
+					GameCache.double_kill_A = 0;
+				}
+				
+				gameRound_A.setBall(gameRound_ball);
+				gameRound_A.setRound(GameCache.round_A);
+				GameCache.Round_LIST_A.add(gameRound_A);
+				gameStatus.setGameRound(GameCache.Round_LIST_A);
+				gameStatus.setDoubleKill(String.valueOf(GameCache.double_kill_A));
+				
+			}else if("B".equals(currentPlayer)) {
+				GameRound gameRound_B = new GameRound();
+				if(lastPlayer.equals(currentPlayer)) {
+					GameCache.double_kill_B ++;
+				}else {
+					GameCache.round_B ++;
+					GameCache.double_kill_B = 0;
+				}
+				gameRound_B.setBall(gameRound_ball);
+				gameRound_B.setRound(GameCache.round_B);
+				GameCache.Round_LIST_B.add(gameRound_B);
+				gameStatus.setGameRound(GameCache.Round_LIST_B);
+				gameStatus.setDoubleKill(String.valueOf(GameCache.double_kill_B));
+			}
+		}
 		return gameStatus;
+	}
+	
+	public List<String> generateBallNum(List<Integer> lastBalls,List<Integer> currentBalls) {
+		List<String> balls = new ArrayList<String>();
+		
+		for(int i = 1; i < 16 ; i++ ) {
+			if(lastBalls.get(i) != currentBalls.get(i) && currentBalls.get(i)==0) {
+				balls.add(String.valueOf(i));
+			}
+		}
+		return balls;
+		
+	}
+	
+	public List<String> generateBallNum(List<Integer> currentBalls) {
+		List<Integer> choose_status_balls = new ArrayList<Integer>();
+	
+		for(Status s : GameCache.choose_status_data) {
+			choose_status_balls.add(s.getStatus());
+		}
+		List<String> balls = new ArrayList<String>();
+		
+		for(int i = 1; i < 16 ; i++ ) {
+			if(choose_status_balls.get(i) != currentBalls.get(i) && currentBalls.get(i)==0) {
+				balls.add(String.valueOf(i));
+			}
+		}
+		return balls;
+		
 	}
 	
 	public void chooseFullOrHalf(GameProcess last,GameProcess current) {
@@ -157,6 +245,8 @@ public class MatchHandleCVDataService {
 					
 					GameCache.choose_flag = true;
 					
+					GameCache.choose_status_data = last.getData();
+					
 				}else if (ball > 8 && last.equalsFull(current)) {
 					logger.info("if half ball in the hole, full ball didn't move");
 					if("A".equals(GameCache.currentPlayer)) {
@@ -166,6 +256,8 @@ public class MatchHandleCVDataService {
 					}
 					
 					GameCache.choose_flag = true;
+					
+					GameCache.choose_status_data = last.getData();
 					
 				}else {
 					logger.info(" if full ball in the hole, half ball move !!!!");
@@ -209,6 +301,7 @@ public class MatchHandleCVDataService {
 						}
 						GameCache.ChooseBeens.remove(0);
 						GameCache.choose_flag = true;
+						GameCache.choose_status_data = last.getData();
 					}
 				}
 			}
