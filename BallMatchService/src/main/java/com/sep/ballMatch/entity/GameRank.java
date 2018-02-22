@@ -4,15 +4,17 @@ public class GameRank {
 	
 	private String id;
 	private String matchId;
-	private String kickOff;
-	private String avgTime;
-	private String kickCount;
-	private String matchTime;
-	private String avgFlow;
-	private String singleStick;
-	private String goalCount;
-	private String finalGoal;
-	private String result;
+	private String kickOff; // 开球成功
+	private String avgTime; // 打击均速
+	private String kickCount;//打击杆数
+	private String matchTime;//比赛用时
+	private String avgFlow;//连杆率
+	private String singleStick;//单干球数
+	private String goalCount;//进球总数
+	private String finalGoal;//8号球
+	private String result; //1 win 0 lose
+	private String winRate;//胜率
+	private String matchCount;//比赛场次
 	private String user_id;
 	private String vs_user_id;
 	
@@ -96,4 +98,17 @@ public class GameRank {
 	public void setKickCount(String kickCount) {
 		this.kickCount = kickCount;
 	}
+	public String getWinRate() {
+		return winRate;
+	}
+	public void setWinRate(String winRate) {
+		this.winRate = winRate;
+	}
+	public String getMatchCount() {
+		return matchCount;
+	}
+	public void setMatchCount(String matchCount) {
+		this.matchCount = matchCount;
+	}
+	
 }

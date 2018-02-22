@@ -41,7 +41,7 @@ public class MatchRankUtil {
 	}
 	
 	public void kickoff(GameRank rank_A,GameRank rank_B,List<GameStore> list){
-		String kickoff = "0";//1,goal 0,non_goal,2no kick
+		String kickoff = "0";//1,goal 0,non_goal,"" no kick
 		
 		GameStore gameStore = list.get(0);
 		List<Status> statuss = gameStore.getData();
@@ -53,10 +53,10 @@ public class MatchRankUtil {
 		}
 		if("A".equals(gameStore.getPlayer())) {
 			rank_A.setKickOff(kickoff);
-			rank_B.setKickOff("2");
+			rank_B.setKickOff("");
 		}else if ("B".equals(gameStore.getPlayer())) {
 			rank_B.setKickOff(kickoff);
-			rank_A.setKickOff("2");
+			rank_A.setKickOff("");
 		}
 		
 		logger.info("play A kickoff : " + rank_A.getKickOff() );
@@ -145,6 +145,9 @@ public class MatchRankUtil {
 				lastPlayer = "B";
 			}
 		}
+		Collections.sort(rank_A_list);
+		Collections.sort(rank_B_list);
+		
 		Collections.reverse(rank_A_list);
 		Collections.reverse(rank_B_list);
 		
@@ -178,25 +181,49 @@ public class MatchRankUtil {
 	}
 	
 	public void finallGoal(GameRank rank_A,GameRank rank_B,List<GameStore> list_A,List<GameStore> list_B,String matchResult){
+		
+		List<List<Status>> finalGoal_A_list = new ArrayList<List<Status>>();
+		List<List<Status>> finalGoal_B_list = new ArrayList<List<Status>>();
+		
 		int finalGoal_A = 0;
 		int finalGoal_B = 0;
 		
 		if("A".equals(matchResult)) {
 			for(GameStore gs : list_A) {
+				boolean flag = false;
 				List<Status> statuss = gs.getData();
-				if(statuss.get(7).getStatus()==0) {
-					finalGoal_A ++;
-					break;
+				for(int i = 1; i < 16; i++) {
+					if(statuss.get(i).getStatus() == 0 && i !=8 ) {
+						flag = true;
+					}else {
+						flag = false;
+						break;
+					}
+				}
+				
+				if(flag) {
+					finalGoal_A_list.add(statuss);
 				}
 			}
+			finalGoal_A = finalGoal_A_list.size() + 1;
 		}else {
 			for(GameStore gs : list_B) {
+				boolean flag = false;
 				List<Status> statuss = gs.getData();
-				if(statuss.get(7).getStatus()==0) {
-					finalGoal_B ++;
-					break;
+				for(int i = 1; i < 16; i++) {
+					if(statuss.get(i).getStatus() == 0 && i !=8 ) {
+						flag = true;
+					}else {
+						flag = false;
+						break;
+					}
+				}
+				
+				if(flag) {
+					finalGoal_B_list.add(statuss);
 				}
 			}
+			finalGoal_B = finalGoal_B_list.size() + 1;
 		}
 		
 		rank_A.setFinalGoal(String.valueOf(finalGoal_A));
@@ -212,22 +239,21 @@ public class MatchRankUtil {
 		int goalCount_A = 0;
 		int goalCount_B = 0;
 		
-		for(GameStore gs : list_A) {
-			List<Status> statuss = gs.getData();
-			for(Status s : statuss) {
-				if(s.getStatus() == 0) {
-					goalCount_A++;
-				}
+		
+		List<Status> statuss_A = list_A.get(0).getData();
+		for(Status s : statuss_A) {
+			if(s.getStatus() == 0) {
+				goalCount_A++;
 			}
 		}
-		for(GameStore gs : list_B) {
-			List<Status> statuss = gs.getData();
-			for(Status s : statuss) {
-				if(s.getStatus() == 0) {
-					goalCount_B++;
-				}
+		
+		List<Status> statuss_B = list_B.get(0).getData();
+		for(Status s : statuss_B) {
+			if(s.getStatus() == 0) {
+				goalCount_B++;
 			}
 		}
+		
 		rank_A.setGoalCount(String.valueOf(goalCount_A));
 		rank_B.setGoalCount(String.valueOf(goalCount_B));
 		

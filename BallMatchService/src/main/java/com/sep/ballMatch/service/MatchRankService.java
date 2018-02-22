@@ -59,6 +59,13 @@ public class MatchRankService implements Runnable{
 			rank_A.setVs_user_id(GameCache.vs_user_id);
 			rank_B.setUser_id(GameCache.vs_user_id);
 			rank_B.setVs_user_id(GameCache.user_id);
+			if("A".equals(matchResult)) {
+				rank_A.setResult("1");
+				rank_B.setResult("0");
+			}else if("B".equals(matchResult)) {
+				rank_A.setResult("0");
+				rank_B.setResult("1");
+			}
 			
 			if(list != null) {
 				rankUtil.kickoff(rank_A, rank_B, list);
@@ -76,7 +83,7 @@ public class MatchRankService implements Runnable{
 									   Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,Types.VARCHAR,
 									   Types.VARCHAR,Types.VARCHAR} ;
 			
-			Object[] values_A = new Object[]{matchResult,rank_A.getKickOff(),rank_A.getAvgTime(),
+			Object[] values_A = new Object[]{rank_A.getResult(),rank_A.getKickOff(),rank_A.getAvgTime(),
 											 rank_A.getKickCount(),rank_A.getGoalCount(),rank_A.getMatchTime(),
 											 rank_A.getAvgFlow(),rank_A.getSingleStick(),rank_A.getFinalGoal(),
 											 match_id};
@@ -93,7 +100,7 @@ public class MatchRankService implements Runnable{
 			
 			String id = Utils.getUuid();
 			
-			Object[] values_B = new Object[]{id,match_id,matchResult,rank_B.getKickOff(),rank_B.getAvgTime(),
+			Object[] values_B = new Object[]{id,match_id,rank_B.getResult(),rank_B.getKickOff(),rank_B.getAvgTime(),
 											 rank_B.getKickCount(),rank_B.getGoalCount(),rank_B.getMatchTime(),
 											 rank_B.getAvgFlow(),rank_B.getSingleStick(),rank_B.getFinalGoal(),
 											 GameCache.vs_user_id,GameCache.user_id };

@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.sep.ballMatch.common.BaseResource;
 import com.sep.ballMatch.entity.GameCache;
 import com.sep.ballMatch.entity.GameProcess;
+import com.sep.ballMatch.entity.GameRank;
 import com.sep.ballMatch.entity.GameStore;
 import com.sep.ballMatch.entity.Result;
 import com.sep.ballMatch.entity.original.GameOriProcess;
@@ -96,5 +97,14 @@ public class MatchResource extends BaseResource {
 		start.start();
 		
 		return Response.ok("ok").build();
+	}
+
+	@GET 
+	@Path("/getRankInfo")
+	public Response getRankInfo(@QueryParam("id") String id,@Context HttpServletRequest request) {
+		
+		GameRank gameRank = matchService.getRankInfo(id);
+		
+		return Response.ok(gameRank).build();
 	}
 }
