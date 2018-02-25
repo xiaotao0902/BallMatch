@@ -18,10 +18,12 @@ import com.google.gson.Gson;
 import com.sep.ballMatch.common.BaseResource;
 import com.sep.ballMatch.entity.GameCache;
 import com.sep.ballMatch.entity.GameProcess;
+import com.sep.ballMatch.entity.GameRank;
 import com.sep.ballMatch.entity.GameStore;
 import com.sep.ballMatch.entity.Result;
 import com.sep.ballMatch.entity.original.GameOriProcess;
 import com.sep.ballMatch.service.MatchOriDataService;
+import com.sep.ballMatch.service.MatchRankService;
 import com.sep.ballMatch.service.MatchService;
 import com.sep.ballMatch.service.MatchStartService;
 
@@ -87,14 +89,22 @@ public class MatchResource extends BaseResource {
 	@GET 
 	@Path("/setPlayer")
 	public Response setPlayer(@QueryParam("player") String player,@Context HttpServletRequest request) {
+		GameCache.cleanCache();
+		
 		GameCache.setCurrentPlayer(player);
-		GameCache.triangle = false;
-		GameCache.kick_off = false;
-		if("A".equals(player)) {
-			GameCache.result = GameCache.user_id;
-		}else {
-			GameCache.result = GameCache.vs_user_id;
-		}
+		
+		Thread start = new Thread(new MatchRankService(player));
+		start.start();
+		
 		return Response.ok("ok").build();
+	}
+
+	@GET 
+	@Path("/getRankInfo")
+	public Response getRankInfo(@QueryParam("id") String id,@Context HttpServletRequest request) {
+		
+		GameRank gameRank = matchService.getRankInfo(id);
+		
+		return Response.ok(gameRank).build();
 	}
 }

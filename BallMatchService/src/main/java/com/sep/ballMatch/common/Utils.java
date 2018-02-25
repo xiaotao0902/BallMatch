@@ -1,5 +1,6 @@
 package com.sep.ballMatch.common;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -150,6 +151,22 @@ public class Utils {
 	public static long getTimeMillis() {
 		long timeMillis = Calendar.getInstance().getTimeInMillis();
 		return timeMillis;
+	}
+	
+	
+	public static int calLastedTime(String start,String end) {
+		int c = 0;
+		try {
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA); 
+			Date startDate = simpleDateFormat.parse(start);
+			Date endDate = simpleDateFormat.parse(end);
+			long startLong = startDate.getTime();
+			long endLong = endDate.getTime();
+			c = (int)((endLong - startLong) / 1000);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return c;
 	}
 	
 	public static void main(String args[]) {

@@ -8,11 +8,11 @@ public class GameStore {
 	
 	private String vs_user_id;
 	
-	private String result;
-	
 	private String matchId;
 	
 	private String player;
+	
+	private String timestamp;
 	
 	private List<Status>data;
 
@@ -56,19 +56,13 @@ public class GameStore {
 		this.vs_user_id = vs_user_id;
 	}
 
-	public String getResult() {
-		return result;
+	
+	public String getTimestamp() {
+		return timestamp;
 	}
 
-	public void setResult(String result) {
-		this.result = result;
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
 	}
-
-	@Override
-	public String toString() {
-		return "GameStore [user_id=" + user_id + ", vs_user_id=" + vs_user_id + ", matchId=" + matchId + ", player="
-				+ player + ", data=" + data + "]";
-	}
-
 
 }
