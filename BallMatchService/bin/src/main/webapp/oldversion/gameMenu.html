@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>page2</title>
+<link href="css/main.css" type="text/css" rel="stylesheet">
+<style>
+#main{margin:80px auto;}
+#main .item{height:560px;width:200px;margin:0 20px;cursor:pointer;
+padding:100px 70px;background:#979794;border-radius:10px;float:left;text-align:center;font-size:35px;color:#fff;}
+#main .item .icon{margin-top:240px;}
+#homeBtn{right:5px;top:5px;text-algin:center;border-radius:10px;}
+#insert1{text-align:left;left:0;bottom:10px;width:35%;border-top-right-radius:10px;
+border-bottom-right-radius:10px;}
+#insert2{text-align:right;right:0;bottom:10px;width:35%;border-top-left-radius:10px;
+border-bottom-left-radius:10px;}
+</style>
+<script>
+window.onload=function(){
+	var oItem1=document.getElementById("item1");
+	var oItem2=document.getElementById("item2");
+	var oItem3=document.getElementById("item3");
+	var oItem4=document.getElementById("item4");
+	
+	var arr=[];
+	oItem1.onclick=function(){
+		window.open("playersPage.html","_self");
+	}
+}
+
+
+</script>
+</head>
+<body>
+<div id="main">
+	<div id="homeBtn" class="btn" onclick="goHome()">首页</div>
+	<div id="insert1" class="btn">请插卡</div>
+	<div id="insert2" class="btn">请插卡</div>
+	<div class="item" id="item1">
+		<span class="title" >抢七</span>
+		<img class="icon" src="img/ball1_gray.gif"/>
+	</div>
+	<div class="item" id="item2">
+		<span class="title" >联赛</span>
+		<img class="icon" src="img/ball2_gray.gif"/>
+	</div>
+	<div class="item" id="item3">
+		<span class="title" >娱乐</span>
+		<img class="icon" src="img/ball3_gray.gif"/>
+	</div>
+	<div class="item" id="item4">
+		<span class="title" >器材</span>
+		<img class="icon" src="img/ball4_gray.gif"/>
+	</div>
+</div>
+</body>
+</html>

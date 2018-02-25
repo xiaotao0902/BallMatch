@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="newversion/js/jquery-3.2.1.js"></script>
+<script>
+window.onload=function(){
+	$("input").click(function(){
+		$.ajax({
+			type: "GET",
+        	url: contextRoot+"/changePlayer",
+        	data: {
+        		"whoStart":whoStart
+        	},
+        	dataType:"json",
+        	success: function(data){
+            	console.log(data);
+        	}
+		});
+	});
+}
+</script>
+</head>
+<body>
+<input type="button" value="按钮" />
+</body>
+</html>

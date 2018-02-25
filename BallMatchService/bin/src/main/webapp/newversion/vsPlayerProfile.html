@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>VS Player Profile</title>
+<link href="css/main.css" type="text/css" rel="stylesheet"/>
+<script src="js/main.js" type="text/javascript"></script>
+<script src="js/jquery-3.2.1.js" type="text/javascript" ></script>
+<script>
+window.onload=function(){
+	new MoveMenu("menuDiv","menu");
+	var oChooseBtn=document.getElementsByClassName("chooseBtn")[0];
+	var oMain=document.getElementById("main");
+	var headImg=oMain.getElementsByClassName("headImg");
+	var left=headImg[0].offsetLeft+headImg[0].offsetWidth;
+	oChooseBtn.style.left=left-20+"px";
+	
+	var oBackBtn=document.getElementsByClassName("backBtn")[0];
+	oBackBtn.onclick=function(){
+		window.location.href="startScreen.html";
+	}
+	
+	for(var i=0;i<headImg.length;i++){
+		(function(index){
+			headImg[index].onclick=function(){
+				var _index=index;
+				index=index==0?"A":"B";
+				
+				//tell backend who starts the game
+				$.ajax({
+					type: "POST",
+					contentType: "application/json; charset=utf-8",
+	            	url: contextRoot+"/start",
+	            	data: JSON.stringify({
+	            		"player":index
+	            	}),
+	            	dataType:"json",
+	            	success: function(data){
+	                	//alert(JSON.stringify(data));
+	                	window.sessionStorage.setItem("whoStart",_index);
+	    				window.location.href="vsPlayerProflieScore.html";
+	            	}
+				});
+				
+			}
+		})(i);
+		
+		var span=headImg[i].getElementsByTagName("span");
+		span[0].innerHTML=userData[i].name;
+		span[1].innerHTML=userData[i].summary;
+		var img=headImg[i].getElementsByTagName("img");
+		img[0].src=userData[i].img;
+		img[1].src=userData[i].scoreLevel;
+	}
+	
+}
+</script>
+</head>
+<body>
+<img src="img/Unicuelogo.png" id="logo">
+<img src="img/frame/more.png" id="menu"/>
+<div id="menuDiv">
+	<ul id="menuUl">
+		<li>Race setting</li>
+		<li>Profile</li>
+		<li>Coach</li>
+		<li>Live</li>
+		<li>Setting</li>
+	</ul>
+	<img src="img/frame/more.png">
+</div>
+<div id="main">
+	<div class="headImg">
+		<span class="name"></span>
+		<img src="img/headImg.png" />
+		<img src="img/scoreLevel/D.png" class="scoreLevel"/>
+		<span class="summary">新手请多多指教</span>
+	</div>
+	<div class="headImg">
+		<span class="name"></span>
+		<img src="img/headImg_dingjunhui.png" />
+		<img src="img/scoreLevel/A.png" class="scoreLevel">
+		<span class="summary">三十年未逢敌手</span>
+	</div>
+</div>
+<div class="chooseBtn">Choosing Break Player to start game</div>
+<div class="backBtn">Back</div>
+</body>
+</html>

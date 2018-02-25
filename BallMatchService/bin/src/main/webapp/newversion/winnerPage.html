@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Winner Page</title>
+<link href="css/main.css" type="text/css" rel="stylesheet"/>
+<script src="js/main.js" type="text/javascript"></script>
+<script>
+window.onload=function(){
+	var whoWin=window.sessionStorage.getItem("whoWin");
+	var head=document.getElementById("head");
+	var level=document.getElementById("level");
+	var name=document.getElementById("name");
+	var driver=document.getElementById("driver");
+	head.innerHTML=userData[whoWin].img;
+	level.innerHTML=userData[whoWin].scoreLevel;
+	name.innerHTML=userData[whoWin].name;
+	driver.src=userData[whoWin].driver;
+	setTimeout(function(){
+		window.location.href="startScreen.html";
+		window.sessionStorage.clear();
+		$.ajax({
+			type: "GET",
+        	url: contextRoot+"/info",
+        	data: {
+        		"info":"end"
+        	},
+        	dataType:"json",
+        	success: function(data){
+            	console.log(data);
+        	}
+		});
+	},1000);
+}
+</script>
+</head>
+<body>
+<ul id="win">
+	<li><img src="img/headImg.png" id="head"/></li>
+	<li><img src="img/scoreLevel/D.png" id="level"/>234234+5647</li>
+	<li>Winner</li>
+	<li>is</li>
+	<li id="name">Guest</li>
+	<li>Game Over</li>
+</ul>
+<ul id="win1">
+	<li>Clearance: 96%</li>
+	<li>Max hit combo: 8</li>
+	<li><div id="driver"></div></li>
+</ul>
+</body>
+</html>
