@@ -51,6 +51,11 @@
 		$("#img1").click(function(){
 			window.location.href="vsPlayerProfile.html";
 		});
+		
+		$("#headImg1").attr("src",userData[0].startScreenHeadImg);
+		$("#headImg2").attr("src",userData[1].startScreenHeadImg);
+		$("#title1").html(userData[0].name);
+		$("#title2").html(userData[1].name);
 	});
 
 	function showMask() {
@@ -63,10 +68,10 @@
 <body>
 	<div id="userInfo">
 		<ul>
-			<li>董路</li>
-			<li><img src="img/page1/headPic.png" /></li>
-			<li>访客</li>
-			<li><img src="img/page1/vistorPic.png" /></li>
+			<li id="title1"></li>
+			<li><img id="headImg1" src="img/page1/vistorPic.png" /></li>
+			<li id="title2"></li>
+			<li><img id="headImg2" src="img/page1/vistorPic.png" /></li>
 		</ul>
 	</div>
 	<div class="container main" id="startScreen">

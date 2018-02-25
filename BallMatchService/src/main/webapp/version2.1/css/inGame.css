@@ -64,6 +64,7 @@ background-size:300px 600px; */
 	width: 200px;
 	top: -50px;
 	left: 350px;
+	display:none;
 }
 
 .left .infor .lianji1 {

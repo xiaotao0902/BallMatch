@@ -5,7 +5,12 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/.apt_generated"/>
+<<<<<<< HEAD
         <property name="java-output-path" value="/BallMatchService/target/classes"/>
+=======
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
+>>>>>>> 938e5a8a72c4a08949da97451eb05d4f97df8242
         <property name="context-root" value="ballMatch"/>
+        <property name="java-output-path" value="/ballMatch/target/classes"/>
     </wb-module>
 </project-modules>

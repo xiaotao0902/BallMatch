@@ -7,9 +7,11 @@ var userData = [ {
 	scoreLevel : "img/scoreLevel1/C.png",
 	experience : 35437,
 	img : "img/vistorHead.png",
-	driver : 'img/driver1.png',
+	driver : "img/driver1.png",
 	kda : [ 0.6, 0.5, 0.4, 0.3, 0.2, 0.1 ],
-	isVip : false
+	isVip : false,
+	startScreenHeadImg:"img/page1/headPic.png",
+	isLogin:false
 }, {
 	id : "1002",
 	name : "董路",
@@ -19,9 +21,11 @@ var userData = [ {
 	scoreLevel : "img/scoreLevel1/C+.png",
 	experience : 35437,
 	img : "img/head2.png",
-	driver : 'img/driver2.png',
+	driver : "img/driver2.png",
 	kda : [ 0.6, 0.5, 0.4, 0.3, 0.2, 0.1 ],
-	isVip : true
+	isVip : true,
+	startScreenHeadImg:"img/page1/vistorPic.png",
+	isLogin:true
 } ];
 
 function formatTime(time){
@@ -36,8 +40,8 @@ function formatTime(time){
 	return minutes+":"+mm;
 }
 
-var contextRoot="/BallMatchService/bs/game";
-var websocketPath="ws://localhost:8080/BallMatchService/matchSocket";
+var contextRoot="/ballMatch/bs/game";
+var websocketPath="ws://localhost:8080/ballMatch/matchSocket";
 
 function draw(z,h,data,id){
 	var x1=h;

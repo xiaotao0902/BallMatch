@@ -12,6 +12,10 @@
 <script>
 window.onload=function(){
 	var whoStart=window.sessionStorage.getItem("whoStart");
+	/* var ifFirstEnterIn =window.sessionStorage.getItem("ifFirstEnterIn");
+	if(ifFirstEnterIn){
+		window.sessionStorage.setItem("ifFirstEnterIn",false); */
+		//init user info
 	
 	$(document).click(function(){
 		window.location.href="inGame.html";
@@ -38,22 +42,22 @@ window.onload=function(){
 		setTimeout(function(){
 			window.location.href="winnerPage.html";
 		},3000);
-		
 	}
+	
 	for(var i=0;i<2;i++){
 		console.log("userData[i].name ",userData[i].name);
 		$("#page3 .name").eq(i).html(userData[i].name);
 		$("#page3 .scoreImg").eq(i).attr("src","img/scorepage/"+scoreArr[i]+".png");
 	}
 	
-	/* setTimeout(function(){
+	setTimeout(function(){
 		//判断用户是否是会员 会员可享受特定皮肤界面 inGame1.html
 		if(userData[whoStart].isVip){
 			window.location.href="inGame1.html";
 		}else{
 			window.location.href="inGame.html";
 		}
-	},3000); */
+	},3000); 
 };
 
 </script>
@@ -63,11 +67,11 @@ window.onload=function(){
 	<div class="row">
 		<div class="col-lg-6 lmy_relative text-center">
 			<img class="scoreImg" src="img/scorepage/0.png" />
-			<div class="name">访客</div>
+			<div class="name"></div>
 		</div>
 		<div class="col-lg-6 lmy_relative text-center">
 			<img class="scoreImg" src="img/scorepage/0.png" />
-			<div class="name">董路</div>
+			<div class="name"></div>
 		</div>
 	</div>
 </div>
