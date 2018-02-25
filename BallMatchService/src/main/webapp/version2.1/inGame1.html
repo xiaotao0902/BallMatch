@@ -11,31 +11,15 @@
 <script src="js/main.js" type="text/javascript"></script>
 <script type="text/javascript">
 window.onload=function(){
-	
-	$(".moreBtn").click(function(ev){
-		$("#menuDiv").animate({"top":"50px"});
-		ev.stopPropagation();
-	});
-	
-	$("#menuUl li").eq(0).click(function(){
-		window.location.href="startScreen.html";
-	});
-	
-	$(document).click(function(){
-		$("#menuDiv").animate({"top":"-330px"});
-	});
-	
 	var timer=null;
+	var startTime=50;
+	var player=0;
 	$(".left1").css("height",$(document).height()); 
 	
-	//init user infor
 	var whoStart=window.sessionStorage.getItem("whoStart");
-	if(whoStart==null){
-		whoStart=0;
-	}
-	whoStart=parseInt(whoStart);
-	
+	var isClickChange=window.sessionStorage.getItem("isClickChange");
 	var score=window.sessionStorage.getItem("score");
+	
 	var scoreArr=[];
 	if(!!score){
 		scoreArr=score.split(",");
@@ -43,8 +27,72 @@ window.onload=function(){
 		scoreArr=[0,0];
 	}
 	
-	var startTime=50;
-	initUserInfor();
+	var isClickChange=window.sessionStorage.getItem("isClickChange");
+	if(whoStart==null){
+		whoStart=0;
+	}
+	whoStart=parseInt(whoStart);
+	//check if by clicking change btn to link into this page
+	if(!!isClickChange){
+		player=whoStart==0?"A":"B";
+		$.ajax({
+			type: "GET",
+	    	url: contextRoot+"/changePlayer",
+	    	data: {
+	    		"player":player
+	    	},
+	    	dataType:"json",
+	    	success: function(data){
+	        	console.log(data);
+	        	initUserInfor();
+	        	
+	        	//拿到进球细节的信息 load 到页面上
+	        	var html='<li class="li1">R8<img class="img1" src="img/score/1.png" /><img src="img/score/8.png" /></li>'+
+				'<li>R7<img src="img/score/2.png" /><img src="img/score/3.png" /></li>'+
+				'<li>R6<img src="img/score/4.png" /><img src="img/score/5.png" />'+
+				'<img src="img/score/6.png" /></li>'+
+				'<li>R5<img src="img/score/7.png" /></li>'+
+				'<li>R4<img src="img/score/10.png" /><img src="img/score/12.png" />'+
+				'<img src="img/score/13.png" /><img src="img/score/14.png" />'+
+				'<img src="img/score/15.png" /></li>'+
+				'<li>R3<img src="img/score/9.png" /></li>'+
+				'<li>R2<img src="img/score/11.png" /></li>';
+	        	$(".steps").append(html);
+	        	
+	        	if(data.choose=="A"){
+	    			//set big class for balls
+	    			for(var i=0;i<7;i++){
+	    				$("#ballDiv1 li").eq(i).addClass("big");
+	    			}
+	    		}else{
+	    			for(var i=7;i<15;i++){
+	    				$("#ballDiv1 li").eq(i).addClass("big");
+	    			}
+	    		}
+	        	
+	        	//balls
+	        	var oldBalls=window.sessionStorage.getItem("balls");
+	    		console.log("oldBalls",oldBalls);
+	    		//判断是不是第一次打
+	    		if(!!oldBalls){
+	    			var oldBallArr=oldBalls.split(",");
+	    			for(var i=1;i<16;i++){
+	    				if(balls[i]==0&&oldBallArr[i]==1){
+	    					getAGoal(ballArr[i-1],true,data.choose);
+	    				}
+	    			}
+	    		}else{
+	    			for(var i=1;i<16;i++){
+	    				if(balls[i]==0){
+	    					getAGoal(ballArr[i-1],true,data.choose);
+	    				}
+	    			}
+	    		}
+	    	}
+		}); 
+	}else{
+		initUserInfor();
+	}
 	function initUserInfor(){
 		$("#btn1").attr("src",userData[whoStart].img);
 		$(".infor li").eq(0).html(userData[whoStart].name);
@@ -64,36 +112,7 @@ window.onload=function(){
 			}
 			$("#time").html(formatTime(startTime));
 		},1000);
-		
-		var html='<li class="li1">R8<img class="img1" src="img/score/1.png" /><img src="img/score/8.png" /></li>'+
-			'<li>R7<img src="img/score/2.png" /><img src="img/score/3.png" /></li>'+
-			'<li>R6<img src="img/score/4.png" /><img src="img/score/5.png" />'+
-			'<img src="img/score/6.png" /></li>'+
-			'<li>R5<img src="img/score/7.png" /></li>'+
-			'<li>R4<img src="img/score/10.png" /><img src="img/score/12.png" />'+
-			'<img src="img/score/13.png" /><img src="img/score/14.png" />'+
-			'<img src="img/score/15.png" /></li>'+
-			'<li>R3<img src="img/score/9.png" /></li>'+
-			'<li>R2<img src="img/score/11.png" /></li>';
-		$(".steps").append(html);
 	}
-	
-/* 	var li='';
-	for(var i=1;i<16;i++){
-		li+='<li><img src="img/ball/'+i+'.png" /></li>';
-	}
-	$(".ball").append(li);
-	
-	var flag=true;	
-	$(".ball img").click(function(){
-		if(flag){
-			flag=false;
-			$(this).animate({"width":"100px","left":"-25px","top":"-25px","opacity":"0.2"},"slow").
-			animate({"width":"50px","left":"0","top":"0","opacity":"1"},"slow",function(){
-				flag=true;
-			});
-		}
-	}); */
 	
 	$("#extend").hover(function(){
 		$(this).attr("src","img/ingame1/extension1.png");
@@ -127,17 +146,40 @@ window.onload=function(){
 		ballArr[i].isLineBall=false;
 		ballArr[i].onclick=function(){
 			var _this=this;
-			getAGoal(_this,false);
+			getAGoal(_this,false,"A");
 		}
 	} 
 	
-	function getAGoal(obj,ifGetGoal){
-		if(obj.index!=7){
-			ballClick(obj,-100,50,ifGetGoal);
+	function getAGoal(obj,ifGetGoal,choose){
+		if(choose){
+			if(choose=="A"){
+				if(obj.index<7){
+					ballClick(obj,-100,70,ifGetGoal);
+				}else if(obj.index==7){
+					ballClick(obj,-80,80,ifGetGoal);
+					startMoveNew(oTab,{'right':20});
+				}else{
+					ballClick(obj,-100,40,ifGetGoal);
+				}
+			}else{
+				if(obj.index<7){
+					ballClick(obj,-100,40,ifGetGoal);
+				}else if(obj.index==7){
+					ballClick(obj,-80,80,ifGetGoal);
+					startMoveNew(oTab,{'right':20});
+				}else{
+					ballClick(obj,-100,70,ifGetGoal);
+				}
+			}
 		}else{
-			ballClick(obj,-80,80,ifGetGoal);
-			startMoveNew(oTab,{'right':20});
+			if(obj.index!=7){
+				ballClick(obj,-100,70,ifGetGoal);
+			}else{
+				ballClick(obj,-80,80,ifGetGoal);
+				startMoveNew(oTab,{'right':20});
+			}
 		}
+		
 	}
 	
 	function ballClick(obj,margin,width,ifGetGoal){
@@ -167,6 +209,9 @@ window.onload=function(){
 		$(".li1").removeClass("li1");
 		var html='<li class="li1">R8<img class="img1" src="img/score/1.png" /><img src="img/score/8.png" /></li>';
 		$(".steps").prepend(html);
+		
+		$(".lianji").fadeToggle();
+		$(".lianji1").fadeToggle();
 	});
 	
 	//lianjiLi
@@ -179,10 +224,10 @@ window.onload=function(){
 		oLiOfTab[i].index=i;
 		oLiOfTab[i].innerHTML=userData[i].name+" Win";
 		oLiOfTab[i].onclick=function(){
-			var player=this.index==0?"A":"B";
+			var player1=this.index==0?"A":"B";
 			$.ajax({
 				type: "GET",
-	        	url: contextRoot+"/setPlayer?player="+player,
+	        	url: contextRoot+"/setPlayer?player="+player1,
 	        	dataType:"json",
 	        	success: function(data){
 	            	console.log(data);
@@ -203,16 +248,25 @@ window.onload=function(){
 	
 	$("#extend").click(function(){
 		startTime=100;
+		
+		clearInterval(timer);
+		timer=setInterval(function(){
+			startTime--;
+			if(startTime==0){
+				clearInterval(timer);
+				$("#time").css("color","red");
+			}
+			$("#time").html(formatTime(startTime));
+		},1000);
 	});
 	
 	$("#change").click(function(){
-		var player=0;
 		whoStart=whoStart==0?1:0;
+		console.log(whoStart);
 		window.sessionStorage.setItem("whoStart",whoStart);
-		
 		//判断是不是vip 如果是 则跳转页面，如果不是，则不跳转
-		if(userData[whoStart].isVip){
-			window.location.href="inGame1.html";
+		if(!userData[whoStart].isVip){
+			window.location.href="inGame.html";
 		}else{
 			$("#time").html("00:50");
 			player=whoStart==0?"A":"B";
@@ -225,11 +279,23 @@ window.onload=function(){
 	        	dataType:"json",
 	        	success: function(data){
 	            	console.log(data);
-	            	
 	            	initUserInfor();
 	        	}
 			}); 
 		}
+	});
+	
+	$(".moreBtn").click(function(ev){
+		$("#menuDiv").animate({"top":"50px"});
+		ev.stopPropagation();
+	});
+	
+	$("#menuUl li").eq(0).click(function(){
+		window.location.href="startScreen.html";
+	});
+	
+	$(document).click(function(){
+		$("#menuDiv").animate({"top":"-330px"});
 	});
 	
 	var websocket = null;
@@ -254,12 +320,30 @@ window.onload=function(){
 	//接收到消息的回调方法
 	websocket.onmessage = function (event) {
 		console.log(event);
+		/* {
+		    "player": "A", //没变 表示当前玩家
+		    "balls": [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],// 没变，球的状态0为进了
+		    "choose": "A", // A 全色球变大（或者其他效果）B 花瓣球变大（或者其他效果） 空字符串 效果不变
+		    "gameRound": [ //round 为R几 ball 对应的每轮进球规矩。注意一点这个轨迹根据当前玩家显示,
+		                            // 比如这个例子 这个round就是 玩家A的
+		      {
+		        "round": 1,
+		        "ball": ["1" ]
+		    },
+		      {
+		        "round": 2,
+		        "ball": ["1", "3"]
+		    }
+		    ],
+		    "doubleKill": "2" // 当doublekill 等于2开始 都换数字图片显示，最好动态显示。
+		} */
 		//1 表示不进 0 表示进球
 		//{"player":"A","balls":[0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1]} 
 	    //setMessageInnerHTML(event.data);
 		var data=event.data;
 		console.log("data "+data);
 		data=JSON.parse(data);
+		var choose=data.choose;
 		var balls=data.balls;
 		console.log("balls "+balls);
 		var oldBalls=window.sessionStorage.getItem("balls");
@@ -269,27 +353,24 @@ window.onload=function(){
 			var oldBallArr=oldBalls.split(",");
 			for(var i=1;i<16;i++){
 				if(balls[i]==0&&oldBallArr[i]==1){
-					getAGoal(ballArr[i-1],true);
+					getAGoal(ballArr[i-1],true,data.choose);
 				}
 			}
 		}else{
 			for(var i=1;i<16;i++){
 				if(balls[i]==0){
-					getAGoal(ballArr[i-1],true);
+					getAGoal(ballArr[i-1],true,data.choose);
 				}
 			}
 		}
 		console.log("data.player",data.player);
-		
-		
-		//切换用户
+		//切换用户 这里需要特殊处理 区分 vip
 		var player=data.player=="A"?0:1;
 		window.sessionStorage.setItem("whoStart",player);
 		playerName.innerHTML=userData[player].name+"<span>"+scoreArr[player]+"</span>";
 		
 		playerName.style.background="url('../newversion/img/playerName"+(player+1)+".png') no-repeat -180px";
 		timeDiv.innerHTML="00:50"; 
-		
 		window.sessionStorage.setItem("balls",balls.join(","));
 	}
 	
@@ -332,9 +413,7 @@ window.onload=function(){
 	</ul>
 </div>
 <img src="img/ingame1/more.png" class="moreBtn"/>
-
 <div class="left1 text-center">
-	
 	<img id="btn1" class="head" src="img/head/head2.png" />
 	<ul class="infor">
 		<li class="fontType">董路</li>
@@ -342,7 +421,8 @@ window.onload=function(){
 		<li>4.82</li>
 		<li>35437</li>
 		<li><img class="scoreLevel" src="img/scoreLevel1/C+.png" /></li>
-		<li><img class="lianji" src="img/ingame1/lianji/x.png"/>
+		<li>
+			<img class="lianji" src="img/ingame1/lianji/x.png"/>
 			<img class="lianji1" src="img/ingame1/lianji/3.png"/>
 		</li>
 	</ul>
@@ -371,13 +451,13 @@ window.onload=function(){
 <div id="ballDiv">
 	<div id="ballDiv1">
 		<ul>
-			<li style="z-index:10;"><img src="img/ball/1.png" style="z-index:10;"/></li>
-			<li style="z-index:11;"><img src="img/ball/2.png" style="z-index:11;"/></li>
-			<li style="z-index:10;"><img src="img/ball/3.png" style="z-index:10;"/></li>
-			<li><img class="alpha" src="img/ball/4.png" /></li>
-			<li><img class="alpha" src="img/ball/5.png" /></li>
-			<li><img src="img/ball/6.png" /></li>
-			<li><img src="img/ball/7.png" /></li>
+			<li style="z-index:10;" class="big"><img src="img/ball/1.png" style="z-index:10;"/></li>
+			<li style="z-index:11;" class="big"><img src="img/ball/2.png" style="z-index:11;"/></li>
+			<li style="z-index:10;" class="big"><img src="img/ball/3.png" style="z-index:10;"/></li>
+			<li class="big"><img class="alpha" src="img/ball/4.png" /></li>
+			<li class="big"><img class="alpha" src="img/ball/5.png" /></li>
+			<li class="big"><img src="img/ball/6.png" /></li>
+			<li class="big"><img src="img/ball/7.png" /></li>
 			<li><img src="img/ball/8.png" /></li>
 			<li><img src="img/ball/9.png" /></li>
 			<li><img src="img/ball/10.png" /></li>

@@ -24,10 +24,9 @@
 }
 
 #page2 .head1 {
-	position: absolute;
-    top: 50px;
-    left: 230px;
-    width: 150px;
+    top: 20px;
+    width: 164px;
+    position: relative;
 }
 
 #page2 .head2 {

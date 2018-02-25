@@ -34,12 +34,8 @@ $(document).ready(function(){
 					_vs_index = 0;
 					_index = 1;
 				}
-				
-				window.sessionStorage.setItem("whoStart",_index);
-				window.location.href="vsPlayerProfileScore.html";
-				
 				//tell backend who starts the game
-				/* $.ajax({
+				$.ajax({
 					type: "POST",
 					contentType: "application/json; charset=utf-8",
 	            	url: contextRoot+"/start",
@@ -51,25 +47,36 @@ $(document).ready(function(){
 	            	//dataType:"json",
 	            	success: function(data){
 	                	window.sessionStorage.setItem("whoStart",_index);
-	    				window.location.href="vsPlayerProflieScore.html";
+	                	//window.sessionStorage.setItem("ifFirstEnterIn",true);
+	    				window.location.href="vsPlayerProfileScore.html";
 	            	},
 	            	error:function(message){
 	            		alert("error "+message);
 	            	}
-				});  */
+				});  
 			});
-			
 		})(i);
-		
-		console.log(userData);
-		if(i==1){
-			headImg.eq(i).attr("src",userData[i].img);
-			$(".fontType").eq(i).html(userData[i].name);
-			$(".title1").eq(0).html(userData[i].summary);
-			$(".title2").eq(0).html(userData[i].summary1);
-			$(".title3").eq(0).html(userData[i].level);
-			$("#div1").append('<img class="scoreLevel" src="'+userData[i].scoreLevel+'" />');
-			draw(75,65.5,userData[i].kda,"myCanvas"+i);
+		//if isLogin temporary write dead.
+		if(userData[i].isLogin){
+			if(i==0){
+				/* var html='';
+				$("#div0").html();
+				headImg.eq(i).attr("src",userData[i].img);
+				$(".fontType").eq(i).html(userData[i].name); */
+			}else{
+				headImg.eq(i).attr("src",userData[i].img);
+				$(".fontType").eq(i).html(userData[i].name);
+				$(".title1").eq(0).html(userData[i].summary);
+				$(".title2").eq(0).html(userData[i].summary1);
+				$(".title3").eq(0).html(userData[i].level);
+				$("#div1").append('<img class="scoreLevel" src="'+userData[i].scoreLevel+'" />');
+				draw(75,65.5,userData[i].kda,"myCanvas"+i);
+			}
+		}else{
+			if(i==0){
+				headImg.eq(i).attr("src",userData[i].img);
+				$(".fontType").eq(i).html(userData[i].name);
+			}
 		}
 	} 
 });
@@ -79,8 +86,14 @@ $(document).ready(function(){
 <div class="container" id="page2">
 	<div class="row">
 		<div class="col-lg-6 text-center lmy_relative" id="div0">
-			<img class="head1 headImg" src="img/vistorHead.png" />
-			<span class="name fontType">访客</span>
+			<div class="row">
+				<div class="profile">
+					<img class="head1 headImg" src="img/vistorHead.png" />
+					<ul>
+						<li><span class="fontType"></span></li>
+					</ul>
+				</div>
+			</div>
  		</div>
 		<div class="col-lg-6 text-center lmy_relative" id="div1">
 			<div class="row">
