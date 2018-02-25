@@ -40,8 +40,8 @@ function formatTime(time){
 	return minutes+":"+mm;
 }
 
-var contextRoot="/ballMatch/bs/game";
-var websocketPath="ws://localhost:8080/ballMatch/matchSocket";
+var contextRoot="/BallMatchService/bs/game";
+var websocketPath="ws://localhost:8080/BallMatchService/matchSocket";
 
 function draw(z,h,data,id){
 	var x1=h;

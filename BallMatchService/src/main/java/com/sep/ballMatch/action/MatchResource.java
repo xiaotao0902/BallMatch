@@ -98,6 +98,15 @@ public class MatchResource extends BaseResource {
 		
 		return Response.ok("ok").build();
 	}
+	
+	@GET 
+	@Path("/reStart")
+	public Response reStart(@Context HttpServletRequest request) {
+		
+		GameCache.cleanCache();
+		
+		return Response.ok("ok").build();
+	}
 
 	@GET 
 	@Path("/getRankInfo")

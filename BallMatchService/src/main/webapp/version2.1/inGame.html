@@ -11,7 +11,6 @@
 <script src="js/main.js" type="text/javascript"></script>
 <script type="text/javascript">
 window.onload=function(){
-	
 	var player=0;
 	var startTime=50;
 	var timer=null;
@@ -19,23 +18,20 @@ window.onload=function(){
 	
 	var whoStart=window.sessionStorage.getItem("whoStart");
 	var isClickChange=window.sessionStorage.getItem("isClickChange");
+	var playerEventData=window.sessionStorage.getItem("player"+whoStart);
 	var score=window.sessionStorage.getItem("score");
-	
 	var scoreArr=[];
 	if(!!score){
 		scoreArr=score.split(",");
 	}else{
 		scoreArr=[0,0];
 	}
-	
-	//init user infor
-	
 	if(whoStart==null){
 		whoStart=0;
 	}
 	whoStart=parseInt(whoStart);
 	//check if by clicking change btn to link into this page
-	if(!!isClickChange){
+	/* if(!!isClickChange){
 		player=whoStart==0?"A":"B";
 		$.ajax({
 			type: "GET",
@@ -93,9 +89,10 @@ window.onload=function(){
 	    	}
 		}); 
 	}else{
-		initUserInfor();
-	}
-	function initUserInfor(){
+		
+	} */
+	initUserInfor(playerEventData);
+	function initUserInfor(data){
 		$("#btn1").attr("src",userData[whoStart].img);
 		$(".infor li").eq(0).html(userData[whoStart].name);
 		$(".infor li").eq(1).html(userData[whoStart].summary1);
@@ -106,9 +103,6 @@ window.onload=function(){
 		if(scoreArr[whoStart]==0){
 			scorePanel=1;
 		}
-		/* $(".body1").css({"background":"url('../version2.1/img/scorepanel/"+scorePanel+".png') no-repeat,"+
-						"url('../version2.1/img/ingame/bodyBg.png') no-repeat","background-size":"100% 100%, cover",
-						"background-position":"right, center"}); */
 		$(".body1").css({"background":"url('../version2.1/img/scorepanel/1.png') no-repeat,"+
 			"url('../version2.1/img/ingame/bodyBg.png') no-repeat","background-size":"100% 100%, cover",
 			"background-position":"right, center"});
@@ -121,17 +115,64 @@ window.onload=function(){
 			$("#time").html(formatTime(startTime));
 		},1000);
 		
-		var html='<li class="li1">R8<img class="img1" src="img/score/1.png" /><img src="img/score/8.png" /></li>'+
-			'<li>R7<img src="img/score/2.png" /><img src="img/score/3.png" /></li>'+
-			'<li>R6<img src="img/score/4.png" /><img src="img/score/5.png" />'+
-			'<img src="img/score/6.png" /></li>'+
-			'<li>R5<img src="img/score/7.png" /></li>';
-			/* '<li>R4<img src="img/score/10.png" /><img src="img/score/12.png" />'+
-			'<img src="img/score/13.png" /><img src="img/score/14.png" />'+
-			'<img src="img/score/15.png" /></li>'+
-			'<li>R3<img src="img/score/9.png" /></li>'+
-			'<li>R2<img src="img/score/11.png" /></li>'; */
-		$(".steps").append(html);
+		initGameRoundAndDoubleKill(data);
+	}
+
+	function initGameRoundAndDoubleKill(data){
+		if(data){
+			var gm=data.gameRound;
+			if(gm){
+				//先清空页面的gameRound信息，然后load数据
+				$(".steps").html();
+				for(var i=gm.length-1;i>=0;i--){
+					var liEle=document.createElement("li");
+					if(gm.length==1){
+						liEle.className="li1";
+						for(var j=0;j<gm[i].ball.length;j++){
+							var imgEle=document.createElement("img");
+							if(j==0){
+								imgEle.className="img1";
+							}
+							imgEle.src="img/score/"+gm[i].ball[j]+".png";
+							liEle.appendChild(imgEle);
+						}
+					}else{
+						for(var j=0;j<gm[i].ball.length;j++){
+							var imgEle=document.createElement("img");
+							imgEle.src="img/score/"+gm[i].ball[j]+".png";
+							liEle.appendChild(imgEle);
+						}
+					}
+					$(liEle).prepend("R"+(i+1));
+					$(".steps").append($(liEle));
+				}
+			}
+			if(data.doubleKill){
+				var lianji=parseInt(data.doubleKill)
+				if(lianji>1){
+					$(".lianji").fadeIn();
+					$(".lianji1").attr("src","img/ingame/lianji/"+lianji+".png");
+					$(".lianji1").fadeIn();
+				}else{
+					$(".lianji").fadeOut();
+				}
+			}else{
+				$(".lianji").fadeOut();
+			}
+			
+			if(data.choose){
+				$(".big").removeClass("big");
+				if(data.choose=="A"){
+					for(var i=0;i<7;i++){
+						$("#ballDiv1 li").eq(i).addClass("big");
+					}
+				}else if(data.choose=="B"){
+					for(var i=7;i<15;i++){
+						$("#ballDiv1 li").eq(i).addClass("big");
+					}
+				}
+			}
+		}
 	}
 	
 	$("#extend").hover(function(){
@@ -201,15 +242,6 @@ window.onload=function(){
 				});
 		});
 	}
-	
-	$("#btn1").click(function(){
-		$(".li1").removeClass("li1");
-		var html='<li class="li1">R8<img class="img1" src="img/score/1.png" /><img src="img/score/8.png" /></li>';
-		$(".steps").prepend(html);
-		
-		$(".lianji").fadeToggle();
-		$(".lianji1").fadeToggle();
-	});
 	
 	//lianjiLi
 	var oTab=document.getElementById("tab");
@@ -288,7 +320,18 @@ window.onload=function(){
 	});
 	
 	$("#menuUl li").eq(0).click(function(){
-		window.location.href="startScreen.html";
+		$.ajax({
+			type:"GET",
+			url: contextRoot+"/reStart",
+			success:function(data){
+				console.log(data);
+				window.location.href="startScreen.html";
+			},
+			error:function(data){
+				console.log("error"+data);
+				window.location.href="startScreen.html";
+			}
+		});
 	});
 	
 	$(document).click(function(){
@@ -317,40 +360,52 @@ window.onload=function(){
 	//接收到消息的回调方法
 	websocket.onmessage = function (event) {
 		console.log(event);
-		//1 表示不进 0 表示进球
-		//{"player":"A","balls":[0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1]} 
-	    //setMessageInnerHTML(event.data);
 		var data=event.data;
 		console.log("data "+data);
 		data=JSON.parse(data);
 		var balls=data.balls;
 		console.log("balls "+balls);
+		
 		var oldBalls=window.sessionStorage.getItem("balls");
-		console.log("oldBalls",oldBalls);
-		//判断是不是第一次打
-		if(!!oldBalls){
-			var oldBallArr=oldBalls.split(",");
-			for(var i=1;i<16;i++){
-				if(balls[i]==0&&oldBallArr[i]==1){
-					getAGoal(ballArr[i-1],true);
+		
+		//将A或者B转换成 0或者1 
+		var player=data.player=="A"?0:1;
+		var oldVip=userData[whoStart].isVip;
+		var newVip=userData[player].isVip;
+		//判断当前的whoStart是否与传过来的player一致，如果不一致，则根据用户是不是vip，决定是否切换页面
+		if(whoStart!=player){
+			//vip信息一致 不切页面 直接load数据
+			if(oldVip==newVip){
+				initUserInfor(data);
+				var oldBallArr=oldBalls.split(",");
+				for(var i=1;i<16;i++){
+					if(balls[i]==0&&oldBallArr[i]==1){
+						getAGoal(ballArr[i-1],true);
+					}
 				}
+			}else{
+				window.sessionStorage.setItem("player"+player,data);
+				window.sessionStorage.setItem("whoStart",player);
+				window.location.href="inGame1.html";
 			}
 		}else{
-			for(var i=1;i<16;i++){
-				if(balls[i]==0){
-					getAGoal(ballArr[i-1],true);
+			//判断是不是第一次打
+			if(!!oldBalls){
+				var oldBallArr=oldBalls.split(",");
+				for(var i=1;i<16;i++){
+					if(balls[i]==0&&oldBallArr[i]==1){
+						getAGoal(ballArr[i-1],true);
+					}
+				}
+			}else{
+				for(var i=1;i<16;i++){
+					if(balls[i]==0){
+						getAGoal(ballArr[i-1],true);
+					}
 				}
 			}
+			initGameRoundAndDoubleKill(data);
 		}
-		console.log("data.player",data.player);
-		//切换用户
-		var player=data.player=="A"?0:1;
-		window.sessionStorage.setItem("whoStart",player);
-		playerName.innerHTML=userData[player].name+"<span>"+scoreArr[player]+"</span>";
-		
-		playerName.style.background="url('../newversion/img/playerName"+(player+1)+".png') no-repeat -180px";
-		timeDiv.innerHTML="00:50"; 
-		
 		window.sessionStorage.setItem("balls",balls.join(","));
 	}
 	
@@ -396,10 +451,10 @@ window.onload=function(){
 <div class="left text-center">
 	<img id="btn1" class="head" src="img/head/head2.png" />
 	<ul class="infor">
-		<li class="fontType">董路</li>
-		<li>数学天才</li>
-		<li>4.82</li>
-		<li>35437</li>
+		<li class="fontType"></li>
+		<li></li>
+		<li></li>
+		<li></li>
 		<li><img class="scoreLevel" src="img/scoreLevel1/C+.png" /></li>
 		<li class="lianjiLi"><img class="lianji" src="img/ingame/lianji/x.png"/>
 			<img class="lianji1" src="img/ingame/lianji/3.png"/>
