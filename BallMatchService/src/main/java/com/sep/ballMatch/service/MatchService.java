@@ -112,13 +112,13 @@ public class MatchService {
 				gameRank.setKickOff(kickOff);
 			}
 			
-			String sql_rank = " select CAST(avg(avg_time) as decimal) avg_time,  "
+			String sql_rank = " select CAST(5/avg(avg_time) as decimal(38, 2)) avg_time,   "
 					+ "		 		   CAST(avg(kick_count) as decimal(38, 1))  kick_count, "
-					+ "		 		   CAST(avg(goal_count) as decimal(38, 1)) goal_count,"
+					+ "		 		   CAST(avg(goal_count)/8 as decimal(38, 1)) goal_count, "
 					+ "      		   CAST(avg(match_time) as decimal) match_time, "
 					+ "      		   CAST(avg(avg_flow) as decimal(38, 2) ) avg_flow,"
-					+ "		 	       CAST(avg(single_stick) as decimal(38, 2) ) single_stick,"
-					+ "                CAST(avg(final_goal) as decimal(38, 2) ) final_goal, "
+					+ "		 	       CAST(avg(single_stick)/8 as decimal(38, 2) ) single_stick, "
+					+ "                CAST(avg(final_goal)/8 as decimal(38, 2) ) final_goal, "
 					+ "                CAST(sum(result)/count(1)as decimal(38, 2) )winRate,"
 					+ "				   count(1) match_count "
 					+ "         from ("
