@@ -72,16 +72,18 @@
 }
 
 .item2 .winGif1{
-	width:250px;
+	width:0;
 	position:absolute;
 	top:0px;
+	display:none;
 }
 
 .item2 .winGif2{
-	width:250px;
+	width:0;
 	position:absolute;
 	top:0px;
 	left: -300px;
+	display:none;
 }
 
 .level1{

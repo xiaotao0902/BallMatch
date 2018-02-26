@@ -30,83 +30,6 @@ window.onload=function(){
 		whoStart=0;
 	}
 	whoStart=parseInt(whoStart);
-	initUserInfor(playerEventData);
-	function initUserInfor(data){
-		$("#btn1").attr("src",userData[whoStart].img);
-		$(".infor li").eq(0).html(userData[whoStart].name);
-		$(".infor li").eq(1).html(userData[whoStart].summary1);
-		$(".infor li").eq(2).html(userData[whoStart].level);
-		$(".infor li").eq(3).html(userData[whoStart].experience);
-		$(".scoreLevel").attr("src",userData[whoStart].scoreLevel);
-		
-		timer=setInterval(function(){
-			startTime--;
-			if(startTime==0){
-				clearInterval(timer);
-				$("#time").css("color","red");
-			}
-			$("#time").html(formatTime(startTime));
-		},1000);
-		
-		initGameRoundAndDoubleKill(data);
-	}
-	
-	function initGameRoundAndDoubleKill(data){
-		if(data){
-			var gm=data.gameRound;
-			if(gm){
-				//先清空页面的gameRound信息，然后load数据
-				$(".steps").html();
-				for(var i=gm.length-1;i>=0;i--){
-					var liEle=document.createElement("li");
-					if(gm.length==1){
-						liEle.className="li1";
-						for(var j=0;j<gm[i].ball.length;j++){
-							var imgEle=document.createElement("img");
-							if(j==0){
-								imgEle.className="img1";
-							}
-							imgEle.src="img/score/"+gm[i].ball[j]+".png";
-							liEle.appendChild(imgEle);
-						}
-					}else{
-						for(var j=0;j<gm[i].ball.length;j++){
-							var imgEle=document.createElement("img");
-							imgEle.src="img/score/"+gm[i].ball[j]+".png";
-							liEle.appendChild(imgEle);
-						}
-					}
-					$(liEle).prepend("R"+(i+1));
-					$(".steps").append($(liEle));
-				}
-			}
-			if(data.doubleKill){
-				var lianji=parseInt(data.doubleKill)
-				if(lianji>1){
-					$(".lianji").fadeIn();
-					$(".lianji1").attr("src","img/ingame/lianji/"+lianji+".png");
-					$(".lianji1").fadeIn();
-				}else{
-					$(".lianji").fadeOut();
-				}
-			}else{
-				$(".lianji").fadeOut();
-			}
-			
-			if(data.choose){
-				$(".big").removeClass("big");
-				if(data.choose=="A"){
-					for(var i=0;i<7;i++){
-						$("#ballDiv1 li").eq(i).addClass("big");
-					}
-				}else if(data.choose=="B"){
-					for(var i=7;i<15;i++){
-						$("#ballDiv1 li").eq(i).addClass("big");
-					}
-				}
-			}
-		}
-	}
 	
 	$("#extend").hover(function(){
 		$(this).attr("src","img/ingame1/extension1.png");
@@ -140,40 +63,17 @@ window.onload=function(){
 		ballArr[i].isLineBall=false;
 		ballArr[i].onclick=function(){
 			var _this=this;
-			getAGoal(_this,false,"A");
-		}
+			getAGoal(_this,false);
+		} 
 	} 
 	
-	function getAGoal(obj,ifGetGoal,choose){
-		if(choose){
-			if(choose=="A"){
-				if(obj.index<7){
-					ballClick(obj,-100,70,ifGetGoal);
-				}else if(obj.index==7){
-					ballClick(obj,-80,80,ifGetGoal);
-					startMoveNew(oTab,{'right':20});
-				}else{
-					ballClick(obj,-100,40,ifGetGoal);
-				}
-			}else{
-				if(obj.index<7){
-					ballClick(obj,-100,40,ifGetGoal);
-				}else if(obj.index==7){
-					ballClick(obj,-80,80,ifGetGoal);
-					startMoveNew(oTab,{'right':20});
-				}else{
-					ballClick(obj,-100,70,ifGetGoal);
-				}
-			}
+	function getAGoal(obj,ifGetGoal){
+		if(obj.index!=7){
+			ballClick(obj,-100,$(obj).width(),ifGetGoal);
 		}else{
-			if(obj.index!=7){
-				ballClick(obj,-100,70,ifGetGoal);
-			}else{
-				ballClick(obj,-80,80,ifGetGoal);
-				startMoveNew(oTab,{'right':20});
-			}
+			ballClick(obj,-80,$(obj).width(),ifGetGoal);
+			startMoveNew(oTab,{'right':20});
 		}
-		
 	}
 	
 	function ballClick(obj,margin,width,ifGetGoal){
@@ -199,14 +99,103 @@ window.onload=function(){
 		});
 	}
 	
-	$("#btn1").click(function(){
-		$(".li1").removeClass("li1");
-		var html='<li class="li1">R8<img class="img1" src="img/score/1.png" /><img src="img/score/8.png" /></li>';
-		$(".steps").prepend(html);
+	function initUserInfor(data){
+		data=JSON.parse(data);
+		$("#btn1").attr("src",userData[whoStart].img);
+		$(".infor li").eq(0).html(userData[whoStart].name);
+		$(".infor li").eq(1).html(userData[whoStart].summary1);
+		$(".infor li").eq(2).html(userData[whoStart].level);
+		$(".infor li").eq(3).html(userData[whoStart].experience);
+		$(".scoreLevel").attr("src",userData[whoStart].scoreLevel);
 		
-		$(".lianji").fadeToggle();
-		$(".lianji1").fadeToggle();
-	});
+		timer=setInterval(function(){
+			startTime--;
+			if(startTime==0){
+				clearInterval(timer);
+				$("#time").css("color","red");
+			}
+			$("#time").html(formatTime(startTime));
+		},1000);
+		initGameRoundAndDoubleKill(data);
+	}
+	
+	function initGameRoundAndDoubleKill(data){
+		if(data){
+			var gm=data.gameRound;
+			if(gm){
+				console.log("initGameRoundAndDoubleKill "+JSON.stringify(data));
+				//先清空页面的gameRound信息，然后load数据
+				$(".steps").html();
+				for(var i=gm.length-1;i>=0;i--){
+					var liEle=document.createElement("li");
+					if(gm.length==1){
+						liEle.className="li1";
+						for(var j=0;j<gm[i].ball.length;j++){
+							var imgEle=document.createElement("img");
+							if(j==0){
+								imgEle.className="img1";
+							}
+							imgEle.src="img/score/"+gm[i].ball[j]+".png";
+							liEle.appendChild(imgEle);
+						}
+					}else{
+						for(var j=0;j<gm[i].ball.length;j++){
+							var imgEle=document.createElement("img");
+							imgEle.src="img/score/"+gm[i].ball[j]+".png";
+							liEle.appendChild(imgEle);
+						}
+					}
+					$(liEle).prepend("R"+(i+1));
+					$(".steps").append($(liEle));
+				}
+			}
+			if(data.doubleKill){
+				var lianji=parseInt(data.doubleKill);
+				if(lianji>1){
+					$(".lianji").fadeIn();
+					$(".lianji1").attr("src","img/ingame/lianji/"+lianji+".png");
+					$(".lianji1").fadeIn();
+					setTimeout(function(){
+						$(".lianji").fadeOut();
+						$(".lianji1").attr("src","img/ingame/lianji/"+lianji+".png");
+						$(".lianji1").fadeOut();
+					},2000);
+				}
+			}
+			
+			if(data.choose){
+				for(var i=0;i<15;i++){
+					if(i!=7){
+						$("#ballDiv1 li").eq(i).css({"width":"40px","height":"40px","top":"110px"});
+					}
+				}
+				if(data.choose=="A"){
+					for(var i=0;i<7;i++){
+						$("#ballDiv1 li").eq(i).css({"width":"70px","height":"70px","top":"90px"});
+					}
+				}else if(data.choose=="B"){
+					for(var i=8;i<15;i++){
+						$("#ballDiv1 li").eq(i).css({"width":"70px","height":"70px","top":"90px"});
+					}
+				}
+			}
+		}
+	}
+	
+	function loadBalls(data){
+		if(data){
+			data=JSON.parse(data);
+			var balls=data.balls;
+			for(var i=1;i<16;i++){
+				if(balls[i]==0){
+					getAGoal(ballArr[i-1],true);
+				}
+			}
+		}
+	}
+	
+	initUserInfor(playerEventData);
+	loadBalls(playerEventData);
 	
 	//lianjiLi
 	var oTab=document.getElementById("tab");
@@ -218,6 +207,7 @@ window.onload=function(){
 		oLiOfTab[i].index=i;
 		oLiOfTab[i].innerHTML=userData[i].name+" Win";
 		oLiOfTab[i].onclick=function(){
+			var _index=this.index;
 			var player1=this.index==0?"A":"B";
 			$.ajax({
 				type: "GET",
@@ -225,18 +215,28 @@ window.onload=function(){
 	        	dataType:"json",
 	        	success: function(data){
 	            	console.log(data);
+	            	scoreArr[_index]++;
+	    			window.sessionStorage.setItem("score",scoreArr.join(","));
+	    			window.sessionStorage.setItem("whoStart",_index);
+	    			window.sessionStorage.removeItem("player"+_index);
+	    			window.location.href="vsPlayerProfileScore.html";
+	        	},
+	        	error:function(error){
+	        		console.log("error"+error);
+	        		scoreArr[_index]++;
+	    			window.sessionStorage.setItem("score",scoreArr.join(","));
+	    			window.sessionStorage.setItem("whoStart",_index);
+	    			//黑八进球，赢了之后，清空data信息。
+	    			window.sessionStorage.removeItem("player"+_index);
+	    			window.location.href="vsPlayerProfileScore.html";
 	        	}
 			});
-			scoreArr[this.index]++;
-			window.sessionStorage.setItem("score",scoreArr.join(","));
-			window.sessionStorage.setItem("whoStart",this.index);
-			window.location.href="vsPlayerProfileScore.html";
 		}
 	}
 	
 	oLiOfTab[2].onclick=function(){
 		$("#tab").animate({"right":"-300px"},"slow",function(){
-			$(".ball").find("li").eq(7).find("img").attr("img/ball/8.png");
+			$("#ballDiv1 li").eq(7).find("img").attr("img/ball/8.png");
 		});
 	}
 	
@@ -255,28 +255,42 @@ window.onload=function(){
 	});
 	
 	$("#change").click(function(){
-		whoStart=whoStart==0?1:0;
-		console.log(whoStart);
+		var whoStartNew=whoStart==0?1:0;
+		var oldVip=userData[whoStart].isVip;
+		var newVip=userData[whoStartNew].isVip;
+		var player=whoStartNew==0?"A":"B";
+		$.ajax({
+			type: "GET",
+        	url: contextRoot+"/changePlayer",
+        	data: {
+        		"player":player
+        	},
+        	dataType:"json",
+        	success: function(data){
+            	//需要得到类似websocket的信息 用于load数据
+            	console.log(data);
+        		var balls=data.balls;
+        		var oldBalls=window.sessionStorage.getItem("balls");
+            	window.sessionStorage.setItem("player"+whoStartNew,JSON.stringify(data));
+        		window.sessionStorage.setItem("whoStart",whoStartNew);
+        		window.sessionStorage.setItem("balls",balls.join(","));
+            	
+            	//vip信息一致 不切页面 直接load数据
+        		if(oldVip==newVip){
+        			initUserInfor(data);
+        			var oldBallArr=oldBalls.split(",");
+        			for(var i=1;i<16;i++){
+        				if(balls[i]==0&&oldBallArr[i]==1){
+        					getAGoal(ballArr[i-1],true);
+        				}
+        			}
+        		}else{
+        			window.location.href="inGame.html";
+        		}
+            	
+        	}
+		}); 
 		window.sessionStorage.setItem("whoStart",whoStart);
-		//判断是不是vip 如果是 则跳转页面，如果不是，则不跳转
-		if(!userData[whoStart].isVip){
-			window.location.href="inGame.html";
-		}else{
-			$("#time").html("00:50");
-			player=whoStart==0?"A":"B";
-			$.ajax({
-				type: "GET",
-	        	url: contextRoot+"/changePlayer",
-	        	data: {
-	        		"player":player
-	        	},
-	        	dataType:"json",
-	        	success: function(data){
-	            	console.log(data);
-	            	initUserInfor();
-	        	}
-			}); 
-		}
 	});
 	
 	$(".moreBtn").click(function(ev){
@@ -294,6 +308,7 @@ window.onload=function(){
 			},
 			error:function(data){
 				console.log("error"+data);
+				window.sessionStorage.clear();
 				window.location.href="startScreen.html";
 			}
 		});
@@ -324,19 +339,22 @@ window.onload=function(){
 
 	//接收到消息的回调方法
 	websocket.onmessage = function (event) {
-		console.log(event);
 		var data=event.data;
-		console.log("data "+data);
 		data=JSON.parse(data);
 		var balls=data.balls;
-		console.log("balls "+balls);
-		
 		var oldBalls=window.sessionStorage.getItem("balls");
+		window.sessionStorage.setItem("balls",balls.join(","));
 		
 		//将A或者B转换成 0或者1 
 		var player=data.player=="A"?0:1;
 		var oldVip=userData[whoStart].isVip;
 		var newVip=userData[player].isVip;
+		console.log("JSON.stringify(data) "+JSON.stringify(data));
+		//websocket实时更新session中的值
+		window.sessionStorage.setItem("player"+player,JSON.stringify(data));
+		window.sessionStorage.setItem("whoStart",player);
+		
+		
 		//判断当前的whoStart是否与传过来的player一致，如果不一致，则根据用户是不是vip，决定是否切换页面
 		if(whoStart!=player){
 			//vip信息一致 不切页面 直接load数据
@@ -349,13 +367,13 @@ window.onload=function(){
 					}
 				}
 			}else{
-				window.sessionStorage.setItem("player"+player,data);
-				window.sessionStorage.setItem("whoStart",player);
 				window.location.href="inGame1.html";
 			}
 		}else{
+			initGameRoundAndDoubleKill(data);
 			//判断是不是第一次打
 			if(!!oldBalls){
+				//不是第一次打
 				var oldBallArr=oldBalls.split(",");
 				for(var i=1;i<16;i++){
 					if(balls[i]==0&&oldBallArr[i]==1){
@@ -363,15 +381,14 @@ window.onload=function(){
 					}
 				}
 			}else{
+				//是第一次打
 				for(var i=1;i<16;i++){
 					if(balls[i]==0){
 						getAGoal(ballArr[i-1],true);
 					}
 				}
 			}
-			initGameRoundAndDoubleKill(data);
 		}
-		window.sessionStorage.setItem("balls",balls.join(","));
 	}
 	
 	//连接关闭的回调方法
@@ -428,16 +445,6 @@ window.onload=function(){
 	</ul>
 	<div id="step">
 		<ul class="steps">
-			<!-- <li class="li1">R8<img class="img1" src="img/score/1.png" /><img src="img/score/8.png" /></li>
-			<li>R7<img src="img/score/2.png" /><img src="img/score/3.png" /></li>
-			<li>R6<img src="img/score/4.png" /><img src="img/score/5.png" />
-			<img src="img/score/6.png" /></li>
-			<li>R5<img src="img/score/7.png" /></li>
-			<li>R4<img src="img/score/10.png" /><img src="img/score/12.png" />
-			<img src="img/score/13.png" /><img src="img/score/14.png" />
-			<img src="img/score/15.png" /></li>
-			<li>R3<img src="img/score/9.png" /></li>
-			<li>R2<img src="img/score/11.png" /></li> -->
 		</ul>
 	</div>
 </div>
