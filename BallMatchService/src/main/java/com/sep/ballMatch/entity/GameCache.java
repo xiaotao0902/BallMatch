@@ -10,9 +10,13 @@ public class GameCache {
 	
 	public static String[] players = {"A","B"};
 	
+	public static String[] chooses = {"A","B"};
+	
 	public static String currentPlayer = "A";
 	 
 	public static int playerNum = 0;
+	
+	public static int chooseNum = 0;
 	
 	public static boolean triangle;	
 	
@@ -40,9 +44,9 @@ public class GameCache {
 	
 	public static GameStack STACK = new GameStack();
 	
-	public static int round_A = 1;
+	public static int round_A = 0;
 	
-	public static int round_B = 1;
+	public static int round_B = 0;
 	
 	public static int double_kill_A = 0;
 	
@@ -63,13 +67,54 @@ public class GameCache {
 		ChooseBeens.clear();
 		STACK = null;
 		STACK = new GameStack();
-		round_A = 1;
-	    round_B = 1;
+		round_A = 0;
+	    round_B = 0;
 		double_kill_A = 0;
 		double_kill_B = 0;
 		Round_LIST_A.clear();
 		Round_LIST_B.clear();
 		choose_status_data.clear();
+		gameStatuss.clear();
+	}
+	
+	public static void setRound_LIST_A(GameRound gameRound) {
+		boolean flag = false;
+		if(Round_LIST_A.size() == 0) {
+			Round_LIST_A.add(gameRound);
+		}else {
+			for(GameRound gr : Round_LIST_A) {
+				if(gr.getRound() == gameRound.getRound()) {
+					flag = true;
+					List<String> balls = gameRound.getBall();
+					for(String str : balls) {
+						gr.getBall().add(str);
+					}
+				}
+			}
+			if(!flag) {
+				Round_LIST_A.add(gameRound);
+			}
+		}
+	}
+	
+	public static void setRound_LIST_B(GameRound gameRound) {
+		boolean flag = false;
+		if(Round_LIST_B.size() == 0) {
+			Round_LIST_B.add(gameRound);
+		}else {
+			for(GameRound gr : Round_LIST_B) {
+				if(gr.getRound() == gameRound.getRound()) {
+					flag = true;
+					List<String> balls = gameRound.getBall();
+					for(String str : balls) {
+						gr.getBall().add(str);
+					}
+				}
+			}
+			if(!flag) {
+				Round_LIST_B.add(gameRound);
+			}
+		}
 	}
 	
 	public static void setGameStatus(GameStatus gameStatus) {
@@ -110,9 +155,22 @@ public class GameCache {
 		return currentPlayer;
 	}
 	
+	public static String setChoose(String c) {
+		if("A".equals(c))
+			chooseNum = 1;
+		else
+			chooseNum = 0;
+		choose = c;
+		return choose;
+	}
+	
 	public static String doSwith() {
 		int i = playerNum ++;
 		currentPlayer = players[i%2];
+		
+		int j = chooseNum ++;
+		choose = chooses[j%2];
+		
 		return currentPlayer;
 	}
 	

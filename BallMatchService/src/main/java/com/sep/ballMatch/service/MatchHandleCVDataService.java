@@ -179,7 +179,7 @@ public class MatchHandleCVDataService {
 				
 				gameRound_A.setBall(gameRound_ball);
 				gameRound_A.setRound(GameCache.round_A);
-				GameCache.Round_LIST_A.add(gameRound_A);
+				GameCache.setRound_LIST_A(gameRound_A);
 				gameStatus.setGameRound(GameCache.Round_LIST_A);
 				gameStatus.setDoubleKill(String.valueOf(GameCache.double_kill_A));
 				
@@ -193,7 +193,7 @@ public class MatchHandleCVDataService {
 				}
 				gameRound_B.setBall(gameRound_ball);
 				gameRound_B.setRound(GameCache.round_B);
-				GameCache.Round_LIST_B.add(gameRound_B);
+				GameCache.setRound_LIST_B(gameRound_B);
 				gameStatus.setGameRound(GameCache.Round_LIST_B);
 				gameStatus.setDoubleKill(String.valueOf(GameCache.double_kill_B));
 			}
@@ -238,9 +238,9 @@ public class MatchHandleCVDataService {
 				if(ball < 8 && last.equalsHalf(current)) {
 					logger.info("if full ball in the hole, half ball didn't move");
 					if("A".equals(GameCache.currentPlayer)) {
-						GameCache.choose = "A";
+						GameCache.setChoose("A");
 					}else {
-						GameCache.choose = "B";
+						GameCache.setChoose("B");
 					}
 					
 					GameCache.choose_flag = true;
@@ -250,9 +250,9 @@ public class MatchHandleCVDataService {
 				}else if (ball > 8 && last.equalsFull(current)) {
 					logger.info("if half ball in the hole, full ball didn't move");
 					if("A".equals(GameCache.currentPlayer)) {
-						GameCache.choose = "B";
+						GameCache.setChoose("B");
 					}else {
-						GameCache.choose = "A";
+						GameCache.setChoose("A");
 					}
 					
 					GameCache.choose_flag = true;
@@ -285,17 +285,17 @@ public class MatchHandleCVDataService {
 						if("A".equals(GameCache.currentPlayer)) {
 							if (lastPlayer.equals(currentPlayer)) {
 								if(lastball < 8 && ball < 8) {
-									GameCache.choose = "A";
+									GameCache.setChoose("A");
 								}else {
-									GameCache.choose = "B";
+									GameCache.setChoose("B");
 								}
 							}
 						}else {
 							if (lastPlayer.equals(currentPlayer)) {
 								if(lastball < 8 && ball < 8) {
-									GameCache.choose = "B";
+									GameCache.setChoose("B");
 								}else {
-									GameCache.choose = "A";
+									GameCache.setChoose("A");
 								}
 							}
 						}
