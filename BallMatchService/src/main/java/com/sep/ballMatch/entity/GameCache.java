@@ -48,6 +48,7 @@ public class GameCache {
 	
 	public static int double_kill_B = 0;
 	
+	public static List<GameStatus> gameStatuss = new ArrayList<GameStatus>();
 	
 	public static List<GameRound> Round_LIST_A = new ArrayList<GameRound>();
 	
@@ -71,6 +72,22 @@ public class GameCache {
 		choose_status_data.clear();
 	}
 	
+	public static void setGameStatus(GameStatus gameStatus) {
+		if(gameStatuss.size() != 0 && !gameStatus.getPlayer().equals(gameStatuss.get(0).getPlayer())) {
+			gameStatuss.remove(0);
+			gameStatuss.add(gameStatus);
+		}else {
+			gameStatuss.add(gameStatus);
+		}
+	}
+	
+	public static GameStatus getGameStatus() {
+		GameStatus gameStatus = new GameStatus();
+		if(gameStatuss.size() != 0) {
+			gameStatus = gameStatuss.get(0);
+		}
+		return gameStatus;
+	}
 	public static GameProcess getGameProcess(GameProcess gameProcess) {
 		GameProcess lastBall = new GameProcess();
 		if(game_cache.size() != 0) {

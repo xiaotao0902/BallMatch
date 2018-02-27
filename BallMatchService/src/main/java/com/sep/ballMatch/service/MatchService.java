@@ -76,6 +76,8 @@ public class MatchService {
 			GameStatus gameStatus = handleCV.handleCVdata(last,current);
 			
 			if(gameStatus != null) {
+				GameCache.setGameStatus(gameStatus);
+				
 				String gameStatusJson = gson.toJson(gameStatus);
 				logger.info(gson.toJson(gameStatusJson));
 				matchSocket.onMessage(gameStatusJson);

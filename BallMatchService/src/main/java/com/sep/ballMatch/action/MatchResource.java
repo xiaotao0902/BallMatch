@@ -19,6 +19,7 @@ import com.sep.ballMatch.common.BaseResource;
 import com.sep.ballMatch.entity.GameCache;
 import com.sep.ballMatch.entity.GameProcess;
 import com.sep.ballMatch.entity.GameRank;
+import com.sep.ballMatch.entity.GameStatus;
 import com.sep.ballMatch.entity.GameStore;
 import com.sep.ballMatch.entity.Result;
 import com.sep.ballMatch.entity.original.GameOriProcess;
@@ -82,8 +83,16 @@ public class MatchResource extends BaseResource {
 	@GET 
 	@Path("/changePlayer")
 	public Response changePlayer(@QueryParam("player") String player,@Context HttpServletRequest request) {
+		
+		Gson gson = new Gson();
+		
 		GameCache.setCurrentPlayer(player);
-		return Response.ok("ok").build();
+		
+		GameStatus gameStatus = GameCache.getGameStatus();
+		
+		String gameStatusJson = gson.toJson(gameStatus);
+		
+		return Response.ok(gameStatusJson).build();
 	}
 	
 	@GET 
