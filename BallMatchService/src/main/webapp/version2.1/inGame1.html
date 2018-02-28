@@ -125,7 +125,7 @@ window.onload=function(){
 			if(gm){
 				console.log("initGameRoundAndDoubleKill "+JSON.stringify(data));
 				//先清空页面的gameRound信息，然后load数据
-				$(".steps").html();
+				$(".steps").empty();
 				for(var i=gm.length-1;i>=0;i--){
 					var liEle=document.createElement("li");
 					if(gm.length==1){
@@ -186,9 +186,11 @@ window.onload=function(){
 		if(data){
 			data=JSON.parse(data);
 			var balls=data.balls;
-			for(var i=1;i<16;i++){
-				if(balls[i]==0){
-					getAGoal(ballArr[i-1],true);
+			if(balls){
+				for(var i=1;i<16;i++){
+					if(balls[i]==0){
+						ballArr[i-1].firstElementChild.src="img/ball/line"+i+".png";
+					}
 				}
 			}
 		}
@@ -270,24 +272,36 @@ window.onload=function(){
             	//需要得到类似websocket的信息 用于load数据
             	console.log(data);
         		var balls=data.balls;
-        		var oldBalls=window.sessionStorage.getItem("balls");
-            	window.sessionStorage.setItem("player"+whoStartNew,JSON.stringify(data));
-        		window.sessionStorage.setItem("whoStart",whoStartNew);
-        		window.sessionStorage.setItem("balls",balls.join(","));
-            	
-            	//vip信息一致 不切页面 直接load数据
-        		if(oldVip==newVip){
-        			initUserInfor(data);
-        			var oldBallArr=oldBalls.split(",");
-        			for(var i=1;i<16;i++){
-        				if(balls[i]==0&&oldBallArr[i]==1){
-        					getAGoal(ballArr[i-1],true);
-        				}
-        			}
+        		//检查data是不是空对象 如果是空  表示 刚开始打的时候直接切页面
+        		if(balls){
+        			var oldBalls=window.sessionStorage.getItem("balls");
+                	window.sessionStorage.setItem("player"+whoStartNew,JSON.stringify(data));
+            		window.sessionStorage.setItem("whoStart",whoStartNew);
+            		window.sessionStorage.setItem("balls",balls.join(","));
+                	
+                	//vip信息一致 不切页面 直接load数据
+            		if(oldVip==newVip){
+            			initUserInfor(data);
+            			var oldBallArr=oldBalls.split(",");
+            			for(var i=1;i<16;i++){
+            				if(balls[i]==0&&oldBallArr[i]==1){
+            					getAGoal(ballArr[i-1],true);
+            				}
+            			}
+            		}else{
+            			window.location.href="inGame.html";
+            		}
         		}else{
-        			window.location.href="inGame.html";
+                	window.sessionStorage.setItem("player"+whoStartNew,JSON.stringify(data));
+            		window.sessionStorage.setItem("whoStart",whoStartNew);
+                	
+                	//vip信息一致 不切页面 直接load数据
+            		if(oldVip==newVip){
+            			initUserInfor(data);
+            		}else{
+            			window.location.href="inGame.html";
+            		}
         		}
-            	
         	}
 		}); 
 		window.sessionStorage.setItem("whoStart",whoStart);
@@ -367,7 +381,7 @@ window.onload=function(){
 					}
 				}
 			}else{
-				window.location.href="inGame1.html";
+				window.location.href="inGame.html";
 			}
 		}else{
 			initGameRoundAndDoubleKill(data);

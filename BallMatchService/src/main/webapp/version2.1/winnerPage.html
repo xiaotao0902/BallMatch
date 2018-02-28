@@ -6,14 +6,19 @@
 <link href="css/common.css" type="text/css" rel="stylesheet" />
 <link href="css/win.css" type="text/css" rel="stylesheet" />
 <script src="js/main.js" type="text/javascript"></script>
+
+
 <link rel="stylesheet" href="lib/bootstrap3.3.7.min.css">
 <script src="lib/jquery2.1.1.min.js" type="text/javascript"></script>
 <script src="lib/bootstrap3.3.7.min.js" type="text/javascript"></script>
+<link href="lib/jquery.mloading.css" type="text/css" rel="stylesheet" />
+<script src="lib/jquery.mloading.js" type="text/javascript"></script>
 <script>
 window.onload = function() {
+	$("body").mLoading();
 	var whoWin=window.sessionStorage.getItem("whoWin");
 	whoWin=whoWin==0?1:2;
-	//init();
+	init();
 	function init() {
 		for(var i=0;i<2;i++){
 			$(".item1").eq(i).find("li").eq(0).html(userData[i].name);
@@ -25,29 +30,107 @@ window.onload = function() {
 			$(".item1").eq(i).find("li").eq(3).find("span").eq(0).html(userData[i].experience);
 			//经验值加多少 应该后台传过来
 			$(".item1").eq(i).find("li").eq(3).find("span").eq(1).html(30);
-			
-			$.ajax({
-				type: "GET",
-	        	url: contextRoot+"/getResult",
-	        	data: {
-	        		"id":userData[i].id
-	        	},
-	        	dataType:"json",
-	        	success: function(data){
-	            	console.log(data);
-	            	$(".item2").eq(i).find("li").eq(0).find("span").html(data.matchTime+"秒");
-	            	$(".item2").eq(i).find("li").eq(1).find("span").html(data.winRate);
-	            	$(".item2").eq(i).find("li").eq(2).find("span").html(data.matchCount);
-	            	var hexagon=[data.kickOff,data.avgTime,data.avgFlow,data.singleStick,data.goalCount,data.finalGoal];
-	            	draw(135,120,hexagon, "myCanvas"+i);
-	        	}
-			}); 
 		}
+		$.ajax({
+			type: "GET",
+        	url: contextRoot+"/getRankInfo",
+        	//async: false,
+        	data: {
+        		"id":userData[0].id
+        	},
+        	dataType:"json",
+        	success: function(data1){
+        		$.ajax({
+        			type: "GET",
+                	url: contextRoot+"/getRankInfo",
+                	//async: false,
+                	data: {
+                		"id":userData[1].id
+                	},
+                	dataType:"json",
+                	success: function(data2){
+                		console.log("success"+data1);
+                		console.log("success"+data2);
+                		
+                		$(".item2").eq(0).find("li").eq(0).find("span").html(data.matchTime+"秒");
+                    	$(".item2").eq(0).find("li").eq(1).find("span").html(data.winRate);
+                    	$(".item2").eq(0).find("li").eq(2).find("span").html(data.matchCount);
+                    	var hexagon1=[
+                    	             data1.kickOff,
+                    	             data1.avgTime,
+                    	             data1.avgFlow,
+                    	             data1.singleStick,
+                    	             data1.goalCount,
+                    	             data1.finalGoal
+                    	             ];
+                    	draw(135,120,hexagon1, "myCanvas1");
+                		
+                    	$(".item2").eq(1).find("li").eq(0).find("span").html(data.matchTime+"秒");
+                    	$(".item2").eq(1).find("li").eq(1).find("span").html(data.winRate);
+                    	$(".item2").eq(1).find("li").eq(2).find("span").html(data.matchCount);
+                    	var hexagon2=[
+                    	             data2.kickOff,
+                    	             data2.avgTime,
+                    	             data2.avgFlow,
+                    	             data2.singleStick,
+                    	             data2.goalCount,
+                    	             data2.finalGoal
+                    	             ];
+                    	draw(135,120,hexagon2, "myCanvas2");
+                    	$("body").mLoading("hide");
+                    	$("#win"+whoWin).animate({"width":"0","opacity":0},"slow")
+                		.animate({"width":"250px","opacity":1},"slow");
+                	}
+        		});        		
+        	},
+        	error:function(error){
+        		$.ajax({
+        			type: "GET",
+                	url: contextRoot+"/getRankInfo",
+                	//async: false,
+                	data: {
+                		"id":userData[1].id
+                	},
+                	dataType:"json",
+                	success: function(data){
+                		console.log("success"+data);
+                		console.log("error"+error);
+                    	$(".item2").eq(0).find("li").eq(0).find("span").html("60秒");
+                    	$(".item2").eq(0).find("li").eq(1).find("span").html(3);
+                    	$(".item2").eq(0).find("li").eq(2).find("span").html(0.01);
+                    	var hexagon=["1.00", "0.48", "0.50", "0.33", "0.8", "0.8"]
+                    	draw(135,120,hexagon, "myCanvas1");
+                		
+                    	$(".item2").eq(1).find("li").eq(0).find("span").html(data.matchTime+"秒");
+                    	$(".item2").eq(1).find("li").eq(1).find("span").html(data.winRate);
+                    	$(".item2").eq(1).find("li").eq(2).find("span").html(data.matchCount);
+                    	var hexagon=[data.kickOff,data.avgTime,data.avgFlow,data.singleStick,data.goalCount,data.finalGoal];
+                    	draw(135,120,hexagon, "myCanvas2");
+                    	$("body").mLoading("hide");
+                    	$("#win"+whoWin).animate({"width":"0","opacity":0},"slow")
+                		.animate({"width":"250px","opacity":1},"slow");
+                	}
+        		});
+        		
+        	}
+		}); 
 	}
-	setTimeout(function(){
-		$("#win1").animate({"width":"0","opacity":0},"slow")
-		.animate({"width":"250px","opacity":1},"slow");
-	},2000);
+	
+	$(".headInfor").click(function(){
+		$.ajax({
+			type:"GET",
+			url: contextRoot+"/reStart",
+			success:function(data){
+				console.log(data);
+				window.location.href="startScreen.html";
+			},
+			error:function(data){
+				console.log("error"+data);
+				window.sessionStorage.clear();
+				window.location.href="startScreen.html";
+			}
+		});
+	});
 };
 </script>
 </head>
@@ -63,18 +146,18 @@ window.onload = function() {
 						<div class="col-md-6">
 							<ul class="item1">
 								<li class="fontType"></li>
-								<li>&lt;数学天才&gt;</li>
-								<li><span>4.70</span><span class="levelSpan">0.12</span></li>
-								<li><span>35467</span><span class="jingyanSpan">30</span></li>
+								<li></li>
+								<li><span></span><span class="levelSpan">0.12</span></li>
+								<li><span></span><span class="jingyanSpan">30</span></li>
 							</ul>
 						</div>
 					</div>
 				</div>
 				<div class="row">
 					<ul class="item2">
-						<li><span>41秒</span></li>
-						<li><span>23%</span></li>
-						<li><span>438</span></li>
+						<li><span>65</span></li>
+						<li><span>0</span></li>
+						<li><span>3</span></li>
 						<li><img class="scoreLevel1" src="img/scoreLevel1/C+.png" /></li>
 						<li><img id="win1" class="winGif1" src="img/winpage/win2.png" /></li>
 					</ul>
@@ -104,18 +187,18 @@ window.onload = function() {
 						<div class="col-md-6">
 							<ul class="item1">
 								<li class="fontType"></li>
-								<li>&lt;数学天才&gt;</li>
-								<li><span>4.70</span><span class="levelSpan">0.12</span></li>
-								<li><span>35467</span><span class="jingyanSpan">30</span></li>
+								<li></li>
+								<li><span></span><span class="levelSpan">0.12</span></li>
+								<li><span></span><span class="jingyanSpan">30</span></li>
 							</ul>
 						</div>
 					</div>
 				</div>
 				<div class="row">
 					<ul class="item2">
-						<li><span>41秒</span></li>
-						<li><span>23%</span></li>
-						<li><span>438</span></li>
+						<li><span></span></li>
+						<li><span></span></li>
+						<li><span></span></li>
 						<li><img class="scoreLevel2" src="img/scoreLevel1/C+.png" /></li>
 						<li><img id="win2" class="winGif2" src="img/winpage/win2.png" /></li>
 					</ul>
