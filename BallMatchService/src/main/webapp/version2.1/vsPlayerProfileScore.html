@@ -18,7 +18,11 @@ window.onload=function(){
 		//init user info
 	
 	$(document).click(function(){
-		window.location.href="inGame.html";
+		if(userData[whoStart].isVip){
+			window.location.href="inGame1.html";
+		}else{
+			window.location.href="inGame.html";
+		}
 	});
 	
 	var score=window.sessionStorage.getItem("score");

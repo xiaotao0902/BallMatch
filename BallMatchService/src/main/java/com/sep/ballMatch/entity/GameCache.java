@@ -44,9 +44,9 @@ public class GameCache {
 	
 	public static GameStack STACK = new GameStack();
 	
-	public static int round_A = 0;
+	public static int round_A = 1;
 	
-	public static int round_B = 0;
+	public static int round_B = 1;
 	
 	public static int double_kill_A = 0;
 	
@@ -67,8 +67,8 @@ public class GameCache {
 		ChooseBeens.clear();
 		STACK = null;
 		STACK = new GameStack();
-		round_A = 0;
-	    round_B = 0;
+		round_A = 1;
+	    round_B = 1;
 		double_kill_A = 0;
 		double_kill_B = 0;
 		Round_LIST_A.clear();
@@ -168,8 +168,10 @@ public class GameCache {
 		int i = playerNum ++;
 		currentPlayer = players[i%2];
 		
-		int j = chooseNum ++;
-		choose = chooses[j%2];
+		if(choose_flag) {
+			int j = chooseNum ++;
+			choose = chooses[j%2];
+		}
 		
 		return currentPlayer;
 	}

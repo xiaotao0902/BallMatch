@@ -231,78 +231,76 @@ public class MatchHandleCVDataService {
 	}
 	
 	public void chooseFullOrHalf(GameProcess last,GameProcess current) {
-		if(!GameCache.white_move) {
-			List<Integer> list = last.ifOthersInHoleResult(current);
-			if(list.size() == 1) {
-				int ball = list.get(0);
-				if(ball < 8 && last.equalsHalf(current)) {
-					logger.info("if full ball in the hole, half ball didn't move");
-					if("A".equals(GameCache.currentPlayer)) {
-						GameCache.setChoose("A");
-					}else {
-						GameCache.setChoose("B");
-					}
-					
-					GameCache.choose_flag = true;
-					
-					GameCache.choose_status_data = last.getData();
-					
-				}else if (ball > 8 && last.equalsFull(current)) {
-					logger.info("if half ball in the hole, full ball didn't move");
-					if("A".equals(GameCache.currentPlayer)) {
-						GameCache.setChoose("B");
-					}else {
-						GameCache.setChoose("A");
-					}
-					
-					GameCache.choose_flag = true;
-					
-					GameCache.choose_status_data = last.getData();
-					
+		List<Integer> list = last.ifOthersInHoleResult(current);
+		if(list.size() == 1) {
+			int ball = list.get(0);
+			if(ball < 8 && last.equalsHalf(current)) {
+				logger.info("if full ball in the hole, half ball didn't move");
+				if("A".equals(GameCache.currentPlayer)) {
+					GameCache.setChoose("A");
 				}else {
-					logger.info(" if full ball in the hole, half ball move !!!!");
-					int size = GameCache.ChooseBeens.size();
-					if(size == 0) {
-						logger.info(" any ball is not in the hole before !!!");
-						if("A".equals(GameCache.currentPlayer)) {
-							logger.info(" store the ball ");
-							ChooseBeen cb = new ChooseBeen();
-							cb.setCurrentPlayer("A");
-							cb.setBall(ball);
-							GameCache.ChooseBeens.add(cb);
-						}else {
-							ChooseBeen cb = new ChooseBeen();
-							cb.setCurrentPlayer("B");
-							cb.setBall(ball);
-							GameCache.ChooseBeens.add(cb);
-						}
-						GameCache.choose = "";
+					GameCache.setChoose("B");
+				}
+				
+				GameCache.choose_flag = true;
+				
+				GameCache.choose_status_data = last.getData();
+				
+			}else if (ball > 8 && last.equalsFull(current)) {
+				logger.info("if half ball in the hole, full ball didn't move");
+				if("A".equals(GameCache.currentPlayer)) {
+					GameCache.setChoose("B");
+				}else {
+					GameCache.setChoose("A");
+				}
+				
+				GameCache.choose_flag = true;
+				
+				GameCache.choose_status_data = last.getData();
+				
+			}else {
+				logger.info(" if full ball in the hole, half ball move !!!!");
+				int size = GameCache.ChooseBeens.size();
+				if(size == 0) {
+					logger.info(" any ball is not in the hole before !!!");
+					if("A".equals(GameCache.currentPlayer)) {
+						logger.info(" store the ball ");
+						ChooseBeen cb = new ChooseBeen();
+						cb.setCurrentPlayer("A");
+						cb.setBall(ball);
+						GameCache.ChooseBeens.add(cb);
 					}else {
-						ChooseBeen cb = GameCache.ChooseBeens.get(0);
-						String lastPlayer = cb.getCurrentPlayer();
-						int lastball = cb.getBall();
-						String currentPlayer = GameCache.currentPlayer;
-						if("A".equals(GameCache.currentPlayer)) {
-							if (lastPlayer.equals(currentPlayer)) {
-								if(lastball < 8 && ball < 8) {
-									GameCache.setChoose("A");
-								}else {
-									GameCache.setChoose("B");
-								}
-							}
-						}else {
-							if (lastPlayer.equals(currentPlayer)) {
-								if(lastball < 8 && ball < 8) {
-									GameCache.setChoose("B");
-								}else {
-									GameCache.setChoose("A");
-								}
+						ChooseBeen cb = new ChooseBeen();
+						cb.setCurrentPlayer("B");
+						cb.setBall(ball);
+						GameCache.ChooseBeens.add(cb);
+					}
+					GameCache.choose = "";
+				}else {
+					ChooseBeen cb = GameCache.ChooseBeens.get(0);
+					String lastPlayer = cb.getCurrentPlayer();
+					int lastball = cb.getBall();
+					String currentPlayer = GameCache.currentPlayer;
+					if("A".equals(GameCache.currentPlayer)) {
+						if (lastPlayer.equals(currentPlayer)) {
+							if(lastball < 8 && ball < 8) {
+								GameCache.setChoose("A");
+							}else {
+								GameCache.setChoose("B");
 							}
 						}
-						GameCache.ChooseBeens.remove(0);
-						GameCache.choose_flag = true;
-						GameCache.choose_status_data = last.getData();
+					}else {
+						if (lastPlayer.equals(currentPlayer)) {
+							if(lastball < 8 && ball < 8) {
+								GameCache.setChoose("B");
+							}else {
+								GameCache.setChoose("A");
+							}
+						}
 					}
+					GameCache.ChooseBeens.remove(0);
+					GameCache.choose_flag = true;
+					GameCache.choose_status_data = last.getData();
 				}
 			}
 		}
