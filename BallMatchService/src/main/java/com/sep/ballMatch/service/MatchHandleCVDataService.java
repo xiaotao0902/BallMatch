@@ -110,6 +110,7 @@ public class MatchHandleCVDataService {
 	}
 	
 	public GameStatus matchNormalRull(GameProcess last,GameProcess current) {
+		
 		GameStatus gameStatus = new GameStatus();
 		if(current.ifWhiteInHole()) {// if white ball in the hole change player
 			logger.info("matchNormalRul : if white ball in the hole change player");
@@ -171,31 +172,37 @@ public class MatchHandleCVDataService {
 				GameRound gameRound_A = new GameRound();
 				if(lastPlayer.equals(currentPlayer)) {
 					GameCache.double_kill_A ++;
+					gameRound_A.setBall(gameRound_ball);
+					gameRound_A.setRound(GameCache.round_A);
+					GameCache.setRound_LIST_A(gameRound_A);
+					gameStatus.setGameRound(GameCache.Round_LIST_A);
+					gameStatus.setDoubleKill(String.valueOf(GameCache.double_kill_A));
 					
 				}else {
-					GameCache.round_A ++;
 					GameCache.double_kill_A = 0;
+					gameStatus.setGameRound(GameCache.Round_LIST_A);
+					gameStatus.setDoubleKill(String.valueOf(GameCache.double_kill_A));
+					GameCache.round_A ++;
+					
 				}
 				
-				gameRound_A.setBall(gameRound_ball);
-				gameRound_A.setRound(GameCache.round_A);
-				GameCache.setRound_LIST_A(gameRound_A);
-				gameStatus.setGameRound(GameCache.Round_LIST_A);
-				gameStatus.setDoubleKill(String.valueOf(GameCache.double_kill_A));
 				
 			}else if("B".equals(currentPlayer)) {
 				GameRound gameRound_B = new GameRound();
 				if(lastPlayer.equals(currentPlayer)) {
 					GameCache.double_kill_B ++;
+					
+					gameRound_B.setBall(gameRound_ball);
+					gameRound_B.setRound(GameCache.round_B);
+					GameCache.setRound_LIST_B(gameRound_B);
+					gameStatus.setGameRound(GameCache.Round_LIST_B);
+					gameStatus.setDoubleKill(String.valueOf(GameCache.double_kill_B));
 				}else {
-					GameCache.round_B ++;
 					GameCache.double_kill_B = 0;
+					gameStatus.setGameRound(GameCache.Round_LIST_B);
+					gameStatus.setDoubleKill(String.valueOf(GameCache.double_kill_B));
+					GameCache.round_B ++;
 				}
-				gameRound_B.setBall(gameRound_ball);
-				gameRound_B.setRound(GameCache.round_B);
-				GameCache.setRound_LIST_B(gameRound_B);
-				gameStatus.setGameRound(GameCache.Round_LIST_B);
-				gameStatus.setDoubleKill(String.valueOf(GameCache.double_kill_B));
 			}
 		}
 		return gameStatus;
@@ -210,7 +217,6 @@ public class MatchHandleCVDataService {
 			}
 		}
 		return balls;
-		
 	}
 	
 	public List<String> generateBallNum(List<Integer> currentBalls) {

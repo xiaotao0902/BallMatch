@@ -13,7 +13,7 @@ public class GameCache {
 	public static String[] chooses = {"A","B"};
 	
 	public static String currentPlayer = "A";
-	 
+	
 	public static int playerNum = 0;
 	
 	public static int chooseNum = 0;
