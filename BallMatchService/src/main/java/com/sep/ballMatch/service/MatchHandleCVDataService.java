@@ -183,9 +183,7 @@ public class MatchHandleCVDataService {
 					gameStatus.setGameRound(GameCache.Round_LIST_A);
 					gameStatus.setDoubleKill(String.valueOf(GameCache.double_kill_A));
 					GameCache.round_A ++;
-					
 				}
-				
 				
 			}else if("B".equals(currentPlayer)) {
 				GameRound gameRound_B = new GameRound();
@@ -233,80 +231,60 @@ public class MatchHandleCVDataService {
 			}
 		}
 		return balls;
-		
 	}
 	
 	public void chooseFullOrHalf(GameProcess last,GameProcess current) {
+		
 		List<Integer> list = last.ifOthersInHoleResult(current);
-		if(list.size() == 1) {
-			int ball = list.get(0);
-			if(ball < 8 && last.equalsHalf(current)) {
-				logger.info("if full ball in the hole, half ball didn't move");
-				if("A".equals(GameCache.currentPlayer)) {
+		
+		int size = GameCache.ChooseBeens.size();
+		if(size == 2) { // 如果累积进了两个球（都碰别的球）, 判断第三杆和第二杆是否换人，来判断选出的球。
+			logger.info("if two was ball in the hole, verfy if change player");
+			ChooseBeen cb = GameCache.ChooseBeens.get(1);
+			String lastPlayer = cb.getCurrentPlayer();
+			int ball = cb.getBall();
+			String currentPlayer = GameCache.currentPlayer;
+			if (lastPlayer.equals(currentPlayer)) {
+				if(ball < 8) {
 					GameCache.setChoose("A");
 				}else {
 					GameCache.setChoose("B");
 				}
-				
+			}else {
+				if(ball > 8) {
+					GameCache.setChoose("B");
+				}else {
+					GameCache.setChoose("A");
+				}
+			}
+			GameCache.ChooseBeens.clear();
+			GameCache.choose_flag = true;
+			GameCache.choose_status_data = last.getData();
+			
+		}
+		else if(list.size() == 1) {
+			int ball = list.get(0);
+			if(ball < 8 && last.equalsHalf(current)) {
+				logger.info("if full ball in the hole, half ball didn't move");
+				GameCache.setChoose("A");
 				GameCache.choose_flag = true;
-				
 				GameCache.choose_status_data = last.getData();
 				
 			}else if (ball > 8 && last.equalsFull(current)) {
 				logger.info("if half ball in the hole, full ball didn't move");
-				if("A".equals(GameCache.currentPlayer)) {
-					GameCache.setChoose("B");
-				}else {
-					GameCache.setChoose("A");
-				}
-				
+				GameCache.setChoose("B");
 				GameCache.choose_flag = true;
-				
 				GameCache.choose_status_data = last.getData();
 				
 			}else {
 				logger.info(" if full ball in the hole, half ball move !!!!");
-				int size = GameCache.ChooseBeens.size();
-				if(size == 0) {
+				if(size < 2) {
 					logger.info(" any ball is not in the hole before !!!");
-					if("A".equals(GameCache.currentPlayer)) {
-						logger.info(" store the ball ");
-						ChooseBeen cb = new ChooseBeen();
-						cb.setCurrentPlayer("A");
-						cb.setBall(ball);
-						GameCache.ChooseBeens.add(cb);
-					}else {
-						ChooseBeen cb = new ChooseBeen();
-						cb.setCurrentPlayer("B");
-						cb.setBall(ball);
-						GameCache.ChooseBeens.add(cb);
-					}
+					ChooseBeen cb = new ChooseBeen();
+					cb.setCurrentPlayer(GameCache.currentPlayer);
+					cb.setBall(ball);
+					GameCache.ChooseBeens.add(cb);
 					GameCache.choose = "";
-				}else {
-					ChooseBeen cb = GameCache.ChooseBeens.get(0);
-					String lastPlayer = cb.getCurrentPlayer();
-					int lastball = cb.getBall();
-					String currentPlayer = GameCache.currentPlayer;
-					if("A".equals(GameCache.currentPlayer)) {
-						if (lastPlayer.equals(currentPlayer)) {
-							if(lastball < 8 && ball < 8) {
-								GameCache.setChoose("A");
-							}else {
-								GameCache.setChoose("B");
-							}
-						}
-					}else {
-						if (lastPlayer.equals(currentPlayer)) {
-							if(lastball < 8 && ball < 8) {
-								GameCache.setChoose("B");
-							}else {
-								GameCache.setChoose("A");
-							}
-						}
-					}
-					GameCache.ChooseBeens.remove(0);
-					GameCache.choose_flag = true;
-					GameCache.choose_status_data = last.getData();
 				}
 			}
 		}

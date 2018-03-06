@@ -87,10 +87,17 @@ public class MatchResource extends BaseResource {
 		Gson gson = new Gson();
 		
 		GameCache.setCurrentPlayer(player);
+		GameStatus gameStatus = null;
 		
-		GameStatus gameStatus = GameCache.getGameStatus();
+		gameStatus = GameCache.getGameStatus(player);
+		gameStatus.setPlayer(player);
+		if(GameCache.choose_flag) {
+			gameStatus.setChoose(GameCache.swithChoose());
+		}
 		
 		String gameStatusJson = gson.toJson(gameStatus);
+		
+		logger.info(gson.toJson(gameStatusJson));
 		
 		return Response.ok(gameStatusJson).build();
 	}

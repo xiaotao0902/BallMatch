@@ -82,14 +82,14 @@ public class MatchService {
 				logger.info(gson.toJson(gameStatusJson));
 				matchSocket.onMessage(gameStatusJson);
 				//store the data to nosql database
-				GameStore gameStore = new GameStore(); 
-				gameStore.setMatchId(GameCache.matchId);
-				gameStore.setPlayer(gameStatus.getPlayer());
-				gameStore.setData(current.getData());
-				gameStore.setTimestamp(Utils.getTimeStampToTD());
-				
-				Thread startCloudant = new Thread(new MatchCloudantDataService(gameStore));
-				startCloudant.start();
+//				GameStore gameStore = new GameStore(); 
+//				gameStore.setMatchId(GameCache.matchId);
+//				gameStore.setPlayer(gameStatus.getPlayer());
+//				gameStore.setData(current.getData());
+//				gameStore.setTimestamp(Utils.getTimeStampToTD());
+//				
+//				Thread startCloudant = new Thread(new MatchCloudantDataService(gameStore));
+//				startCloudant.start();
 			}
 		}
 	}

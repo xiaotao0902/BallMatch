@@ -52,7 +52,11 @@ public class GameCache {
 	
 	public static int double_kill_B = 0;
 	
-	public static List<GameStatus> gameStatuss = new ArrayList<GameStatus>();
+	public static List<GameStatus> gameGround_A = new ArrayList<GameStatus>();
+	
+	public static List<GameStatus> gameGround_B = new ArrayList<GameStatus>();
+	
+	public static List<GameStatus> gameBall = new ArrayList<GameStatus>();
 	
 	public static List<GameRound> Round_LIST_A = new ArrayList<GameRound>();
 	
@@ -74,7 +78,9 @@ public class GameCache {
 		Round_LIST_A.clear();
 		Round_LIST_B.clear();
 		choose_status_data.clear();
-		gameStatuss.clear();
+		gameGround_A.clear();
+		gameGround_B.clear();
+		gameBall.clear();
 	}
 	
 	public static void setRound_LIST_A(GameRound gameRound) {
@@ -118,21 +124,56 @@ public class GameCache {
 	}
 	
 	public static void setGameStatus(GameStatus gameStatus) {
-		if(gameStatuss.size() != 0 && !gameStatus.getPlayer().equals(gameStatuss.get(0).getPlayer())) {
-			gameStatuss.remove(0);
-			gameStatuss.add(gameStatus);
+		
+		GameStatus gameBallCache = new GameStatus();
+		gameBallCache.setBalls(gameStatus.getBalls());
+		
+		if(gameBall.size() != 0) {
+			gameBall.remove(0);
+			gameBall.add(gameBallCache);
 		}else {
-			gameStatuss.add(gameStatus);
+			gameBall.add(gameBallCache);
+		}
+		
+		GameStatus gameGroundCache = new GameStatus();
+		gameGroundCache.setGameRound(gameStatus.getGameRound());
+		
+		if("A".equals(gameStatus.getPlayer())) {
+			if(gameGround_A.size() != 0 ) {
+				gameGround_A.remove(0);
+				gameGround_A.add(gameGroundCache);
+			}else {
+				gameGround_A.add(gameGroundCache);
+			}
+		}else if("B".equals(gameStatus.getPlayer())) {
+			if(gameGround_B.size() != 0 ) {
+				gameGround_B.remove(0);
+				gameGround_B.add(gameGroundCache);
+			}else {
+				gameGround_B.add(gameGroundCache);
+			}
 		}
 	}
 	
-	public static GameStatus getGameStatus() {
+	public static GameStatus getGameStatus(String player) {
 		GameStatus gameStatus = new GameStatus();
-		if(gameStatuss.size() != 0) {
-			gameStatus = gameStatuss.get(0);
+		
+		gameStatus.setBalls(gameBall.get(0).getBalls());
+		
+		if("A".equals(player)) {
+			if(gameGround_A.size() != 0) {
+				gameStatus.setGameRound(gameGround_A.get(0).getGameRound());
+			}
+		}
+		if("B".equals(player)) {
+			if(gameGround_B.size() != 0) {
+				gameStatus.setGameRound(gameGround_B.get(0).getGameRound());
+			}
 		}
 		return gameStatus;
 	}
+	
+
 	public static GameProcess getGameProcess(GameProcess gameProcess) {
 		GameProcess lastBall = new GameProcess();
 		if(game_cache.size() != 0) {
@@ -164,6 +205,12 @@ public class GameCache {
 		return choose;
 	}
 	
+	public static String swithChoose() {
+		int j = chooseNum ++;
+		choose = chooses[j%2];
+		return choose;
+	}
+	
 	public static String doSwith() {
 		int i = playerNum ++;
 		currentPlayer = players[i%2];
@@ -178,6 +225,7 @@ public class GameCache {
 	
 	public static void main(String args[]) {
 		setCurrentPlayer("B");
+		doSwith();
 		System.out.println(currentPlayer);
 	}
 	
